@@ -5,3 +5,4 @@ Bundle-SymbolicName: com.bar.foo
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: BAR
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.eclipse.jface.action
