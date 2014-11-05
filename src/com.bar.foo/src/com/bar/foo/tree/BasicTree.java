@@ -1,8 +1,13 @@
-package com.bar.foo;
+package com.bar.foo.tree;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import com.bar.foo.tree.iterator.BreadthFirstTreeIterator;
+import com.bar.foo.tree.iterator.PostOrderTreeIterator;
+import com.bar.foo.tree.iterator.PreOrderTreeIterator;
+import com.bar.foo.tree.iterator.TreeIterationOrder;
 
 public class BasicTree<T extends ITree<T>> implements ITree<T> {
 
@@ -51,11 +56,11 @@ public class BasicTree<T extends ITree<T>> implements ITree<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		return iterator(IterationOrder.BreadthFirst);
+		return iterator(TreeIterationOrder.BreadthFirst);
 	}
 
 	@Override
-	public Iterator<T> iterator(IterationOrder order) {
+	public Iterator<T> iterator(TreeIterationOrder order) {
 		Iterator<T> iterator = null;
 
 		// This can be done, because T extends (or implements) ITree<T>.

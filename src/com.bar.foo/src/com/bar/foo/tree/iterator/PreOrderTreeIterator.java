@@ -1,33 +1,33 @@
-package com.bar.foo;
+package com.bar.foo.tree.iterator;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
-public class BreadthFirstTreeIterator<T extends ITree<T>> extends
-		TreeIterator<T> {
+import com.bar.foo.tree.ITree;
+
+public class PreOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 
 	/**
-	 * A queue used to maintain state information about the position of the
-	 * iterator. If empty, there is no remaining tree nodes to visit.
+	 * A stack used to maintain state information about the position of the
+	 * iterator. If empty, there is no remaining tree node to visit.
 	 */
-	private final Queue<T> queue = new LinkedList<T>();
+	private final Stack<T> stack = new Stack<T>();
 
 	/**
 	 * The default constructor. Requires a root node. The root node and all
-	 * descendants will be traversed in breadth first order (all nodes at the
-	 * same level will be traversed first).
+	 * descendants will be traversed in a pre-order traversal (a node is
+	 * visited, then its children are visited following the same procedure).
 	 * 
 	 * @param root
 	 *            The root of the tree to iteratively traverse. If null, an
 	 *            {@link IllegalArgumentException} will be thrown.
 	 */
-	public BreadthFirstTreeIterator(T root) {
+	public PreOrderTreeIterator(T root) {
 		super(root);
 
 		// If the root is not null, we need to start the iteration with it by
-		// adding it to the queue.
+		// adding it to the stack.
 		if (root != null) {
-			queue.add(root);
+			stack.push(root);
 		}
 	}
 
@@ -38,7 +38,7 @@ public class BreadthFirstTreeIterator<T extends ITree<T>> extends
 	 */
 	@Override
 	public boolean hasNext() {
-		return !queue.isEmpty();
+		return !stack.isEmpty();
 	}
 
 	/*
@@ -53,9 +53,9 @@ public class BreadthFirstTreeIterator<T extends ITree<T>> extends
 		T next = super.next();
 
 		// If we have another tree node to iterate over, proceed.
-		next = queue.poll();
-		for (T child : next.getChildren()) {
-			queue.add(child);
+		next = stack.pop();
+		for (int i = next.getNumberOfChildren() - 1; i >= 0; i--) {
+			stack.push(next.getChild(i));
 		}
 
 		return next;

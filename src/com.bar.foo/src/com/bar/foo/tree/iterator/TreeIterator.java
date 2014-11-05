@@ -1,7 +1,9 @@
-package com.bar.foo;
+package com.bar.foo.tree.iterator;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import com.bar.foo.tree.ITree;
 
 public abstract class TreeIterator<T extends ITree<T>> implements Iterator<T> {
 

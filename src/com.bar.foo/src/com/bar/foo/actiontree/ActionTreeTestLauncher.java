@@ -1,9 +1,8 @@
-package com.bar.foo.test;
+package com.bar.foo.actiontree;
 
 import java.util.Iterator;
 
-import com.bar.foo.IterationOrder;
-import com.bar.foo.actiontree.ActionTree;
+import com.bar.foo.tree.iterator.TreeIterationOrder;
 
 public class ActionTreeTestLauncher {
 
@@ -24,7 +23,7 @@ public class ActionTreeTestLauncher {
 		child.name = "child 2";
 		tree.addChild(child);
 
-		Iterator<ActionTree> iter = tree.iterator(IterationOrder.PreOrder);
+		Iterator<ActionTree> iter = tree.iterator(TreeIterationOrder.PreOrder);
 		while (iter.hasNext()) {
 			tree = iter.next();
 			System.out.println(tree.name);

@@ -1,6 +1,6 @@
 package com.bar.foo.actiontree;
 
-import com.bar.foo.BasicTree;
+import com.bar.foo.tree.BasicTree;
 
 public class ActionTree extends BasicTree<ActionTree> {
 

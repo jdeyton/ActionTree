@@ -1,8 +1,10 @@
-package com.bar.foo;
+package com.bar.foo.tree.iterator;
 
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+
+import com.bar.foo.tree.ITree;
 
 public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 
