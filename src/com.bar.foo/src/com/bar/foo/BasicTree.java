@@ -3,54 +3,83 @@ package com.bar.foo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
-public class BasicTree<T> implements Iterable<T> {
+public class BasicTree<T extends ITree<T>> implements ITree<T> {
+
+	private T parent;
 
 	private final List<T> children = new ArrayList<T>();
 
-	@Override
-	public void forEach(Consumer<? super T> arg0) {
-		// TODO Auto-generated method stub
-
+	public BasicTree() {
+		this(null);
 	}
 
+	public BasicTree(T parent) {
+		this.parent = parent;
+	}
+
+	@Override
+	public void addChild(T child) {
+		if (child != null) {
+			children.add(child);
+		}
+	}
+
+	@Override
+	public int getNumberOfChildren() {
+		return children.size();
+	}
+
+	@Override
 	public List<T> getChildren() {
 		return new ArrayList<T>(children);
 	}
 
 	@Override
-	public Iterator<T> iterator() {
-		return new BreadthFirstBasicTreeIterator<T>(this);
+	public T getParent() {
+		return parent;
 	}
 
-	public Iterator<T> iterator(IterationOrder order) {
+	@Override
+	public T getChild(int index) {
+		T child = null;
+		if (index >= 0 && index < children.size()) {
+			child = children.get(index);
+		}
+		return child;
+	}
 
+	@Override
+	public Iterator<T> iterator() {
+		return iterator(IterationOrder.BreadthFirst);
+	}
+
+	@Override
+	public Iterator<T> iterator(IterationOrder order) {
 		Iterator<T> iterator = null;
+
+		// This can be done, because T extends (or implements) ITree<T>.
+		T value = (T) this;
 
 		if (order != null) {
 			switch (order) {
 			case BreadthFirst:
-				iterator = new BreadthFirstBasicTreeIterator<T>(this);
+				iterator = new BreadthFirstTreeIterator<T>(value);
 				break;
 			case PreOrder:
-				iterator = new PreOrderBasicTreeIterator<T>(this);
+				iterator = new PreOrderTreeIterator<T>(value);
 				break;
 			case PostOrder:
-				iterator = new PostOrderBasicTreeIterator<T>(this);
+				iterator = new PostOrderTreeIterator<T>(value);
 				break;
 			}
-			;
 		}
 
 		return iterator;
 	}
 
 	@Override
-	public Spliterator<T> spliterator() {
-		// TODO Auto-generated method stub
-		return null;
+	public T removeChild(int index) {
+		return children.remove(index);
 	}
-
 }
