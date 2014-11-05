@@ -1,7 +1,5 @@
 package com.bar.foo.tree.iterator;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
 import com.bar.foo.tree.ITree;
