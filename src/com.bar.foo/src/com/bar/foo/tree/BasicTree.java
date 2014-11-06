@@ -9,30 +9,31 @@ import com.bar.foo.tree.iterator.PostOrderTreeIterator;
 import com.bar.foo.tree.iterator.PreOrderTreeIterator;
 import com.bar.foo.tree.iterator.TreeIterationOrder;
 
-public class BasicTree<T extends ITree<T>> implements ITree<T> {
+public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 
-	private T parent;
+	private T parent = null;
 
 	private final List<T> children = new ArrayList<T>();
 
-	public BasicTree() {
-		this(null);
-	}
-
-	public BasicTree(T parent) {
-		this.parent = parent;
-	}
-
 	@Override
-	public void addChild(T child) {
-		if (child != null) {
-			children.add(child);
+	public boolean addChild(T child) {
+		boolean added = false;
+		if (child != null && !hasChild(child)) {
+			if (children.add(child)) {
+				added = true;
+				T parent = child.getParent();
+				if (parent != null) {
+					parent.removeChild(child);
+				}
+				child.setParent(getValue());
+			}
 		}
+		return added;
 	}
 
 	@Override
-	public int getNumberOfChildren() {
-		return children.size();
+	public T getChild(int index) {
+		return children.get(index);
 	}
 
 	@Override
@@ -41,17 +42,23 @@ public class BasicTree<T extends ITree<T>> implements ITree<T> {
 	}
 
 	@Override
+	public int getNumberOfChildren() {
+		return children.size();
+	}
+
+	@Override
 	public T getParent() {
 		return parent;
 	}
 
 	@Override
-	public T getChild(int index) {
-		T child = null;
-		if (index >= 0 && index < children.size()) {
-			child = children.get(index);
-		}
-		return child;
+	public boolean hasChild(T child) {
+		return children.contains(child);
+	}
+
+	@Override
+	public boolean hasChildren() {
+		return !children.isEmpty();
 	}
 
 	@Override
@@ -63,19 +70,16 @@ public class BasicTree<T extends ITree<T>> implements ITree<T> {
 	public Iterator<T> iterator(TreeIterationOrder order) {
 		Iterator<T> iterator = null;
 
-		// This can be done, because T extends (or implements) ITree<T>.
-		T value = (T) this;
-
 		if (order != null) {
 			switch (order) {
 			case BreadthFirst:
-				iterator = new BreadthFirstTreeIterator<T>(value);
+				iterator = new BreadthFirstTreeIterator<T>(getValue());
 				break;
 			case PreOrder:
-				iterator = new PreOrderTreeIterator<T>(value);
+				iterator = new PreOrderTreeIterator<T>(getValue());
 				break;
 			case PostOrder:
-				iterator = new PostOrderTreeIterator<T>(value);
+				iterator = new PostOrderTreeIterator<T>(getValue());
 				break;
 			}
 		}
@@ -85,6 +89,30 @@ public class BasicTree<T extends ITree<T>> implements ITree<T> {
 
 	@Override
 	public T removeChild(int index) {
-		return children.remove(index);
+		T child = children.remove(index);
+		if (child != null) {
+			child.setParent(null);
+		}
+		return child;
 	}
+
+	@Override
+	public boolean removeChild(T child) {
+		boolean removed = children.remove(child);
+		if (removed) {
+			child.setParent(null);
+		}
+		return removed;
+	}
+
+	/**
+	 * This method is for use solely inside {@link BasicTree}.
+	 * 
+	 * @param parent
+	 *            The new parent.
+	 */
+	protected final void setParent(T parent) {
+		this.parent = parent;
+	}
+
 }
