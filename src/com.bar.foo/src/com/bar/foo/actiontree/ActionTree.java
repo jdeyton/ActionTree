@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ContributionManager;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolBar;
@@ -34,6 +35,18 @@ public class ActionTree extends BasicTree<ActionTree> {
 
 	private ActionTreeMenuCreator menuCreator = null;
 
+	protected IMenuCreator getMenuCreator() {
+		if (menuCreator == null) {
+			menuCreator = new ActionTreeMenuCreator(this);
+		}
+		return menuCreator;
+	}
+	
+	public IAction getAction() {
+		// TODO
+		return null;
+	}
+	
 	public void setAction(IAction action) {
 		if (action != null) {
 			text = action.getText();

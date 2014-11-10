@@ -1,9 +1,14 @@
 package com.bar.foo.actiontree;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.ContributionManager;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
@@ -231,8 +236,74 @@ public class ActionTreeContribution {
 	 * @return The {@link #item}.
 	 */
 	private ActionContributionItem getActionContributionItem() {
-		// TODO
-		return null;
+
+		// If the item is uninitialized, we need to create it.
+		if (item == null) {
+			IAction action = actionTree.getAction();
+			if (actionTree.hasChildren()) {
+				if (action == null) {
+					// Create a dropdown-style Action whose default click brings
+					// up the child Menu.
+					action = new Action(actionTree.text,
+							Action.AS_DROP_DOWN_MENU) {
+						@Override
+						public void run() {
+							// Get the corresponding ToolItem and Menu.
+							ToolItem toolItem = (ToolItem) item.getWidget();
+							IMenuCreator menuCreator = actionTree
+									.getMenuCreator();
+							Menu menu = menuCreator.getMenu(toolItem
+									.getParent());
+
+							// We want to align the menu with the bottom-left
+							// corner
+							// of
+							// the ToolItem arrow.
+							Rectangle r = toolItem.getBounds();
+							Point p = new Point(r.x, r.y + r.height);
+							p = toolItem.getParent().toDisplay(p.x, p.y);
+							menu.setLocation(p.x, p.y);
+							menu.setVisible(true);
+
+							return;
+						}
+					};
+				} else {
+					// Create a dropdown-style Action whose default click action
+					// re-directs to the ActionTree.
+					action = new Action(actionTree.text,
+							Action.AS_DROP_DOWN_MENU) {
+						@Override
+						public void run() {
+							actionTree.getAction().run();
+						}
+					};
+				}
+				// Configure the new Action just like the ActionTree.
+				action.setText(actionTree.text);
+				action.setToolTipText(actionTree.toolTipText);
+				action.setImageDescriptor(actionTree.image);
+				action.setMenuCreator(actionTree.getMenuCreator());
+			} else if (action == null) {
+				// If no action is set, we need to create a dummy Action.
+				action = new Action(actionTree.text) {
+					@Override
+					public void run() {
+						// Do nothing.
+					}
+				};
+				// Configure the new Action just like the ActionTree.
+				action.setText(actionTree.text);
+				action.setToolTipText(actionTree.toolTipText);
+				action.setImageDescriptor(actionTree.image);
+			}
+			action.setEnabled(actionTree.enabled);
+			// We can now create the ActionContributionItem. Note that
+			// ActionTrees without children will not have a Menu.
+			item = new ActionContributionItem(action);
+		}
+
+		return item;
 	}
 
 	/**
