@@ -25,11 +25,23 @@ import com.bar.foo.tree.BasicTree;
  */
 public class ActionTree extends BasicTree<ActionTree> {
 
-	public String text = null;
-	public String toolTipText = null;
-	public int style = Action.AS_PUSH_BUTTON;
-	public ImageDescriptor image = null;
+	public enum Type {
+		Dropdown, DropdownWithAction, Action;
+	}
+
+	private static final String defaultText = "(ActionTree)";
+	private static final String defaultToolTipText = null;
+	private static final int defaultStyle = Action.AS_PUSH_BUTTON;
+	private static final ImageDescriptor defaultImage = null;
+
+	public String text = defaultText;
+	public String toolTipText = defaultToolTipText;
+	public int style = defaultStyle;
+	public ImageDescriptor image = defaultImage;
+
 	public boolean enabled = true;
+
+	private IAction action = null;
 
 	private final Map<Object, ActionTreeContribution> contributions = new IdentityHashMap<Object, ActionTreeContribution>();
 
@@ -41,19 +53,26 @@ public class ActionTree extends BasicTree<ActionTree> {
 		}
 		return menuCreator;
 	}
-	
+
 	public IAction getAction() {
-		// TODO
-		return null;
+		return action;
 	}
-	
+
 	public void setAction(IAction action) {
 		if (action != null) {
 			text = action.getText();
 			toolTipText = action.getToolTipText();
 			style = action.getStyle();
 			image = action.getImageDescriptor();
+		} else {
+			text = defaultText;
+			toolTipText = defaultToolTipText;
+			style = defaultStyle;
+			image = defaultImage;
 		}
+		this.action = action;
+
+		return;
 	}
 
 	/**
@@ -77,7 +96,7 @@ public class ActionTree extends BasicTree<ActionTree> {
 			contributions.put(menu, contribution);
 			contribution.fill(menu);
 		}
-		
+
 		return;
 	}
 
@@ -94,7 +113,7 @@ public class ActionTree extends BasicTree<ActionTree> {
 			contributions.put(toolBar, contribution);
 			contribution.fill(toolBar);
 		}
-		
+
 		return;
 	}
 
@@ -112,7 +131,7 @@ public class ActionTree extends BasicTree<ActionTree> {
 			contributions.put(manager, contribution);
 			contribution.fill(manager);
 		}
-		
+
 		return;
 	}
 
