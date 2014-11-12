@@ -20,6 +20,9 @@ import com.bar.foo.tree.BasicTree;
  * {@code ActionTree extends SimpleTree<ActionTree>} because you should call the
  * super constructor with the ActionTree itself as the value.
  * 
+ * TODO Update this documentation to describe the default behavior of the
+ * ActionTree.
+ * 
  * @author Jordan
  * 
  */
@@ -28,24 +31,87 @@ public class ActionTree extends BasicTree<ActionTree> {
 	// TODO The contribution should be disabled if the menu is empty, there is
 	// no default action, or if enabled is set to false.
 
+	/**
+	 * The default {@link #text}, "(ActionTree)"
+	 */
 	private static final String defaultText = "(ActionTree)";
+	/**
+	 * The default {@link #toolTipText}, (no tool tip, or null).
+	 */
 	private static final String defaultToolTipText = null;
+	/**
+	 * The default {@link #style}, {@link IAction#AS_PUSH_BUTTON}.
+	 */
 	private static final int defaultStyle = Action.AS_PUSH_BUTTON;
+	/**
+	 * The default {@link #image}, (no image, or null).
+	 */
 	private static final ImageDescriptor defaultImage = null;
 
+	/**
+	 * The string displayed for the {@code ActionTree}'s contributions to
+	 * widgets.
+	 * 
+	 * @see #defaultText
+	 */
 	public String text = defaultText;
+	/**
+	 * The string displayed for the tool tip of the {@code ActionTree}'s
+	 * contributions to widgets, if applicable.
+	 * 
+	 * @see defaultToolTipText
+	 */
 	public String toolTipText = defaultToolTipText;
+	/**
+	 * The style of the {@code ActionTree}'s contributions to widgets. This
+	 * should be set based on the styles set in the class {@link Action}, e.g.,
+	 * {@link IAction#AS_PUSH_BUTTON} or {@link IAction#AS_CHECK_BOX}.
+	 * 
+	 * @see #defaultStyle
+	 */
 	public int style = defaultStyle;
+	/**
+	 * The image used for the {@code ActionTree}'s contributions to widgets.
+	 * 
+	 * @see #defaultImage
+	 */
 	public ImageDescriptor image = defaultImage;
 
+	/**
+	 * Whether or not the {@code ActionTree} should be disabled.
+	 * <p>
+	 * <b>Note:</b> The default behavior of this class is to disable an
+	 * {@code ActionTree} if its {@link #action} is unset and has no children
+	 * regardless of this flag.
+	 * </p>
+	 */
 	public boolean enabled = true;
 
+	/**
+	 * The default {@link Action} associated with this {@code ActionTree}. If
+	 * null, then the {@link ActionTree default behavior of the ActionTree} will
+	 * take effect.
+	 */
 	private IAction action = null;
 
+	/**
+	 * A map containing the {@code ActionTree}'s contributions--stored as
+	 * {@link ActionTreeContribution}s--to widgets, keyed on the widgets.
+	 */
 	private final Map<Object, ActionTreeContribution> contributions = new IdentityHashMap<Object, ActionTreeContribution>();
 
+	/**
+	 * The {@link IMenuCreator} used to create context and sub-menus filled with
+	 * the {@code ActionTree}'s child {@code ActionTree}s.
+	 */
 	private ActionTreeMenuCreator menuCreator = null;
 
+	/**
+	 * Gets the {@link IMenuCreator} used to create context and sub-menus filled
+	 * with the {@code ActionTree}'s child {@code ActionTree}s.
+	 * 
+	 * @return The {@code IMenuCreator} for the {@code ActionTree}.
+	 */
 	protected IMenuCreator getMenuCreator() {
 		if (menuCreator == null) {
 			menuCreator = new ActionTreeMenuCreator(this);
@@ -53,17 +119,36 @@ public class ActionTree extends BasicTree<ActionTree> {
 		return menuCreator;
 	}
 
+	/**
+	 * Gets the current {@link #action} associated with this {@code ActionTree}.
+	 * This value may be null, in which case the {@link ActionTree default
+	 * behavior of the ActionTree} will take effect.
+	 * 
+	 * @return The {@code ActionTree}'s associated JFace {@code Action}.
+	 */
 	public IAction getAction() {
 		return action;
 	}
 
+	/**
+	 * Sets the current {@link #action} associated with this {@code ActionTree}.
+	 * 
+	 * @param action
+	 *            If not null, then the related properties ({@link #text},
+	 *            {@link #image}, and such) will be synchronized with the
+	 *            {@code Action}. If null, then the {@link ActionTree default
+	 *            behavior of the ActionTree} will take effect.
+	 */
 	public void setAction(IAction action) {
+		// If the Action is not null, update the other properties.
 		if (action != null) {
 			text = action.getText();
 			toolTipText = action.getToolTipText();
 			style = action.getStyle();
 			image = action.getImageDescriptor();
-		} else {
+		}
+		// If the Action is null, set the properties to their defaults.
+		else {
 			text = defaultText;
 			toolTipText = defaultToolTipText;
 			style = defaultStyle;
