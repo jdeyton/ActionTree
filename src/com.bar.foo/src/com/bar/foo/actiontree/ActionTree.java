@@ -76,10 +76,13 @@ public class ActionTree extends BasicTree<ActionTree> {
 
 	/**
 	 * Refreshes all of the contributions made by this {@code ActionTree}. This
-	 * should be called after the text, tool tip, style, or image is changed.
+	 * should be called after one or more of the {@code ActionTree}'s properties
+	 * has been changed.
 	 */
 	public void refresh() {
-		// TODO
+		for (ActionTreeContribution contribution : contributions.values()) {
+			contribution.refresh();
+		}
 	}
 
 	/**
