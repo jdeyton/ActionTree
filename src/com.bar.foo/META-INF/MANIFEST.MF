@@ -7,7 +7,5 @@ Bundle-Vendor: BAR
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.eclipse.jface.action,
  org.eclipse.jface.resource,
- org.eclipse.swt,
  org.eclipse.swt.graphics,
- org.eclipse.swt.layout,
  org.eclipse.swt.widgets
