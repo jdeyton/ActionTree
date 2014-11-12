@@ -25,9 +25,8 @@ import com.bar.foo.tree.BasicTree;
  */
 public class ActionTree extends BasicTree<ActionTree> {
 
-	public enum Type {
-		Dropdown, DropdownWithAction, Action;
-	}
+	// TODO The contribution should be disabled if the menu is empty, there is
+	// no default action, or if enabled is set to false.
 
 	private static final String defaultText = "(ActionTree)";
 	private static final String defaultToolTipText = null;
