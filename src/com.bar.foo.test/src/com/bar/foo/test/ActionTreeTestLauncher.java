@@ -72,12 +72,66 @@ public class ActionTreeTestLauncher {
 		});
 		tree.addChild(child1);
 
-		tree.fill(toolBarManager);
+		// Add another child.
+		ActionTree child2 = new ActionTree();
+		child2.text = "Child2";
+		tree.addChild(child2);
+
+		// Add a grandchild.
+		ActionTree grandChild1 = new ActionTree();
+		grandChild1.setAction(new Action("GrandChild1") {
+			@Override
+			public void run() {
+				System.out.println("GrandChild1");
+			}
+		});
+		child2.addChild(grandChild1);
+
+		// Add another grandchild.
+		ActionTree grandChild2 = new ActionTree();
+		grandChild2.setAction(new Action("GrandChild2") {
+			@Override
+			public void run() {
+				System.out.println("GrandChild2");
+			}
+		});
+		child2.addChild(grandChild2);
+
 		// TODO Try filling first, then refreshing after all children are added.
+		tree.fill(toolBarManager);
 		// ------------------------------------------------------------ //
 
-		// Add an ActionTree with children and a default action.
-		// TODO
+		// ---- Add an ActionTree with children and a default action. ---- //
+		ActionTree treeDefaultAction = new ActionTree();
+		treeDefaultAction.setAction(new Action("ActionTree (default action)") {
+			@Override
+			public void run() {
+				System.out.println("ActionTree (default action)");
+			}
+		});
+
+		// Add a child.
+		child1 = new ActionTree();
+		child1.setAction(new Action("Child1") {
+			@Override
+			public void run() {
+				System.out.println("Child1 (second tree)");
+			}
+		});
+		treeDefaultAction.addChild(child1);
+
+		// Add another child.
+		child2 = new ActionTree();
+		child2.setAction(new Action("Child2") {
+			@Override
+			public void run() {
+				System.out.println("Child2 (second tree)");
+			}
+		});
+		treeDefaultAction.addChild(child2);
+
+		treeDefaultAction.fill(toolBarManager);
+		// --------------------------------------------------------------- //
 
 		// Refresh the ToolBar.
 		toolBarManager.update(true);
