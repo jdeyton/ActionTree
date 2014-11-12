@@ -58,6 +58,27 @@ public class ActionTreeTestLauncher {
 		});
 		basicActionTree.fill(toolBarManager);
 
+		// ---- Add an ActionTree with children and grandchildren. ---- //
+		ActionTree tree = new ActionTree();
+		tree.text = "ActionTree";
+
+		// Add a child.
+		ActionTree child1 = new ActionTree();
+		child1.setAction(new Action("Child1") {
+			@Override
+			public void run() {
+				System.out.println("Child1");
+			}
+		});
+		tree.addChild(child1);
+
+		tree.fill(toolBarManager);
+		// TODO Try filling first, then refreshing after all children are added.
+		// ------------------------------------------------------------ //
+
+		// Add an ActionTree with children and a default action.
+		// TODO
+
 		// Refresh the ToolBar.
 		toolBarManager.update(true);
 
