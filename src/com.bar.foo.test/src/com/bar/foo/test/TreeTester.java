@@ -22,7 +22,7 @@ public class TreeTester {
 
 	@Test
 	public void checkAddChild() {
-		
+
 		// TODO Check that the same child can't be added twice.
 
 		// Add a child and check the connections between child and parent.
@@ -34,18 +34,20 @@ public class TreeTester {
 		parent.addChild(child);
 		checkConnected(parent, child, 0);
 		checkSevered(newParent, child);
-		
+
 		// Add the child to the second parent and check the connections.
 		newParent.addChild(child);
 		checkSevered(parent, child);
 		checkConnected(newParent, child, 0);
+
+		return;
 	}
 
 	@Test
 	public void checkRemoveChild() {
 
 		// TODO Check that the same child can't be removed twice.
-		
+
 		// Add a child, remove it, then make sure all connections are severed.
 		DummyTree parent = new DummyTree();
 		DummyTree child = new DummyTree();
@@ -59,6 +61,23 @@ public class TreeTester {
 		parent.addChild(child);
 		parent.removeChild(child);
 		checkSevered(parent, child);
+
+		return;
+	}
+
+	@Test
+	public void checkBreadthFirstIterator() {
+		// TODO
+	}
+
+	@Test
+	public void checkPreOrderIterator() {
+		// TODO
+	}
+
+	@Test
+	public void checkPostOrderIterator() {
+		// TODO
 	}
 
 	private void checkConnected(DummyTree parent, DummyTree child, int index) {
@@ -118,5 +137,4 @@ public class TreeTester {
 
 		return;
 	}
-
 }
