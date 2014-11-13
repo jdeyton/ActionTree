@@ -28,6 +28,8 @@ import com.bar.foo.tree.BasicTree;
  */
 public class ActionTree extends BasicTree<ActionTree> {
 
+	// TODO Implement equals, hashCode, copy, and clone.
+	
 	// TODO The contribution should be disabled if the menu is empty, there is
 	// no default action, or if enabled is set to false.
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.bar.foo.tree.iterator.TreeIterationOrder;
 
+// TODO Documentation
 public interface ITree<T extends ITree<T>> extends Iterable<T> {
 
 	public boolean addChild(T child);

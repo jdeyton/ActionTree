@@ -9,6 +9,7 @@ import com.bar.foo.tree.iterator.PostOrderTreeIterator;
 import com.bar.foo.tree.iterator.PreOrderTreeIterator;
 import com.bar.foo.tree.iterator.TreeIterationOrder;
 
+// TODO Documentation
 public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 
 	private T parent = null;
@@ -114,5 +115,5 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	protected final void setParent(T parent) {
 		this.parent = parent;
 	}
-
+	
 }
