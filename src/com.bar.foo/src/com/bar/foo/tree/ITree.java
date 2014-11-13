@@ -35,4 +35,9 @@ public interface ITree<T extends ITree<T>> extends Iterable<T> {
 	public T removeChild(int index);
 
 	public boolean removeChild(T child);
+	
+	public boolean nodeEquals(T otherNode);
+	public int nodeHashCode();
+	public void nodeCopy(T otherNode);
+	public T nodeClone();
 }

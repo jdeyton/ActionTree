@@ -115,5 +115,17 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	protected final void setParent(T parent) {
 		this.parent = parent;
 	}
-	
+
+	// TODO Override equals, copy, and clone.
+
+	@Override
+	public int hashCode() {
+		int hash = super.hashCode();
+		Iterator<T> iterator = iterator();
+		while (iterator.hasNext()) {
+			hash += 31 * iterator.next().nodeHashCode();
+		}
+		return hash;
+	}
+
 }
