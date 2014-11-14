@@ -218,8 +218,8 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 				subtree = iterator.next();
 				// We have to hash the number of children because we use a
 				// breadth-first traversal instead of recursion.
-				hash += 31 * subtree.getNumberOfChildren();
-				hash += 31 * subtree.hashCode();
+				hash = hash * 31 + subtree.getNumberOfChildren();
+				hash = hash * 31 + subtree.hashCode();
 			}
 		}
 

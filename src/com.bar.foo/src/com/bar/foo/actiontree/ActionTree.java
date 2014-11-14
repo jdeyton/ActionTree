@@ -270,9 +270,11 @@ public class ActionTree extends BasicTree<ActionTree> {
 	@Override
 	public int hashCode() {
 		int hash = super.hashCode();
-		hash += 31 * (text != null ? text.hashCode() : 0);
-		hash += 31 * (toolTipText != null ? toolTipText.hashCode() : 0);
-		// TODO Hash the other properties.
+		hash = hash * 31 + (text == null ? 0 : text.hashCode());
+		hash = hash * 31 + (toolTipText == null ? 0 : toolTipText.hashCode());
+		hash = hash * 31 + style;
+		hash = hash * 31 + (image == null ? 0 : image.hashCode());
+		hash = hash * 31 + (action == null ? 0 : action.hashCode());
 		return hash;
 	}
 
