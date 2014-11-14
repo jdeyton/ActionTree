@@ -36,7 +36,7 @@ public interface ITree<T extends ITree<T>> extends Iterable<T> {
 
 	public boolean removeChild(T child);
 
-	public boolean equals(Object object, boolean fullTree);
+	public boolean equals(ITree<T> object, boolean fullTree);
 
 	public int hashCode(boolean fullTree);
 }

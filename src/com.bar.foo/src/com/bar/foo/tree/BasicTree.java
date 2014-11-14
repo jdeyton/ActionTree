@@ -159,53 +159,70 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	@Override
 	public boolean equals(Object object) {
 		// There is no information that is not directly related to its
-		// genealogy stored in the BasicTree. Two objects are only equal if they
-		// are the same object.
-		return super.equals(object);
+		// genealogy stored in the BasicTree. Thus, two objects are equal if
+		// they are the same or if they are both non-null BasicTrees.
+		return (this == object || (object != null && object instanceof BasicTree<?>));
 	}
 
 	@Override
-	public final boolean equals(Object object, boolean fullTree) {
+	public final boolean equals(ITree<T> object, boolean fullTree) {
 		boolean equals = equals(object);
+
 		if (equals && fullTree && object instanceof BasicTree<?>) {
-			// Get iterators for this tree and the other.
-			Iterator<T> iterator = iterator();
-			BasicTree<?> tree = (BasicTree<?>) object;
-			Iterator<?> treeIterator = tree.iterator();
+			BasicTree<T> tree = (BasicTree<T>) object;
+
+			// Grab breadth-first iterators for these trees.
+			T root = getValue();
+			T treeRoot = tree.getValue();
+			Iterator<T> iterator = new BreadthFirstTreeIterator<T>(root);
+			Iterator<T> treeIterator = new BreadthFirstTreeIterator<T>(treeRoot);
 
 			// Skip the first node, which is this one, since it's already been
 			// compared above.
-			iterator.next();
-			treeIterator.next();
+			T subtree = iterator.next();
+			T treeSubtree = treeIterator.next();
 
 			// Loop over all of the values in the tree and look for
 			// inconsistencies between the iterators.
 			while (equals && iterator.hasNext() && treeIterator.hasNext()) {
-				equals = iterator.next().equals(treeIterator.next());
+				subtree = iterator.next();
+				treeSubtree = treeIterator.next();
+				// We need to compare both the number of children and the node
+				// data to determine if the two nodes are the same. We must
+				// check the number of children to satisfy equality for
+				// non-recursive breadth first search.
+				equals = (subtree.getNumberOfChildren() == treeSubtree
+						.getNumberOfChildren() && subtree.equals(treeSubtree));
 			}
 		}
+
 		return equals;
 	}
 
 	@Override
 	public int hashCode() {
 		// There is no information that is not directly related to its
-		// genealogy stored in the BasicTree. Two objects are only equal if they
-		// are the same object, thus, there is no fitting hash for a BasicTree.
+		// genealogy stored in the BasicTree. There is no property to hash!
 		return super.hashCode();
 	}
 
 	@Override
 	public final int hashCode(boolean fullTree) {
 		int hash = hashCode();
+
 		if (fullTree) {
 			// Loop over all descendants and add their hashes to the hash.
-			Iterator<T> iterator = iterator();
-			iterator.next();
+			Iterator<T> iterator = new BreadthFirstTreeIterator<T>(getValue());
+			T subtree = iterator.next();
 			while (iterator.hasNext()) {
-				hash += 31 * iterator.next().hashCode();
+				subtree = iterator.next();
+				// We have to hash the number of children because we use a
+				// breadth-first traversal instead of recursion.
+				hash += 31 * subtree.getNumberOfChildren();
+				hash += 31 * subtree.hashCode();
 			}
 		}
+
 		return hash;
 	}
 
