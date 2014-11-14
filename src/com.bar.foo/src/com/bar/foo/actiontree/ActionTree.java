@@ -28,8 +28,6 @@ import com.bar.foo.tree.BasicTree;
  */
 public class ActionTree extends BasicTree<ActionTree> {
 
-	// TODO Implement equals, hashCode, copy, and clone.
-	
 	// TODO The contribution should be disabled if the menu is empty, there is
 	// no default action, or if enabled is set to false.
 
@@ -107,6 +105,40 @@ public class ActionTree extends BasicTree<ActionTree> {
 	 * the {@code ActionTree}'s child {@code ActionTree}s.
 	 */
 	private ActionTreeMenuCreator menuCreator = null;
+
+	/**
+	 * The default constructor. Creates a new {@code ActionTree} with no
+	 * children.
+	 */
+	public ActionTree() {
+		// Nothing to do.
+	}
+
+	/**
+	 * The default copy constructor.
+	 * 
+	 * @param tree
+	 *            The {@code ActionTree} to copy. If not null, the tree will be
+	 *            copied, not including its descendants.
+	 */
+	public ActionTree(ActionTree tree) {
+		// TODO
+	}
+
+	/**
+	 * The full copy constructor.
+	 * 
+	 * @param tree
+	 *            The {@code ActionTree} to copy. To copy, this value must not
+	 *            be null.
+	 * @param fullTree
+	 *            If true, the tree and all of its descendants will be copied.
+	 *            This creates an <i>entirely new tree!</i> If false, only this
+	 *            node in the tree will be copied.
+	 */
+	public ActionTree(ActionTree tree, boolean fullTree) {
+		// TODO
+	}
 
 	/**
 	 * Gets the {@link IMenuCreator} used to create context and sub-menus filled
@@ -222,6 +254,26 @@ public class ActionTree extends BasicTree<ActionTree> {
 		}
 
 		return;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		boolean equals = super.equals(object);
+		if (!equals && object != null && object instanceof ActionTree) {
+			ActionTree tree = (ActionTree) object;
+
+			// TODO Compare the properties...
+		}
+		return equals;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = super.hashCode();
+		hash += 31 * (text != null ? text.hashCode() : 0);
+		hash += 31 * (toolTipText != null ? toolTipText.hashCode() : 0);
+		// TODO Hash the other properties.
+		return hash;
 	}
 
 	// ---- Extends ITree<T> ---- //

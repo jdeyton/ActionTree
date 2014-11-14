@@ -12,9 +12,49 @@ import com.bar.foo.tree.iterator.TreeIterationOrder;
 // TODO Documentation
 public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 
+	/**
+	 * The parent of this tree node.
+	 */
 	private T parent = null;
 
+	/**
+	 * The children of this tree node.
+	 */
 	private final List<T> children = new ArrayList<T>();
+
+	/**
+	 * The default constructor. Creates a new {@code BasicTree} with no
+	 * children.
+	 */
+	public BasicTree() {
+		// Nothing to do.
+	}
+
+	/**
+	 * The default copy constructor.
+	 * 
+	 * @param tree
+	 *            The {@code BasicTree} to copy. If not null, the tree will be
+	 *            copied, not including its descendants.
+	 */
+	protected BasicTree(BasicTree<T> tree) {
+		// TODO
+	}
+
+	/**
+	 * The full copy constructor.
+	 * 
+	 * @param tree
+	 *            The {@code BasicTree} to copy. To copy, this value must not be
+	 *            null.
+	 * @param fullTree
+	 *            If true, the tree and all of its descendants will be copied.
+	 *            This creates an <i>entirely new tree!</i> If false, only this
+	 *            node in the tree will be copied.
+	 */
+	protected BasicTree(BasicTree<T> tree, boolean fullTree) {
+		// TODO
+	}
 
 	@Override
 	public boolean addChild(T child) {
@@ -116,14 +156,55 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 		this.parent = parent;
 	}
 
-	// TODO Override equals, copy, and clone.
+	@Override
+	public boolean equals(Object object) {
+		// There is no information that is not directly related to its
+		// genealogy stored in the BasicTree. Two objects are only equal if they
+		// are the same object.
+		return super.equals(object);
+	}
+
+	@Override
+	public final boolean equals(Object object, boolean fullTree) {
+		boolean equals = equals(object);
+		if (equals && fullTree && object instanceof BasicTree<?>) {
+			// Get iterators for this tree and the other.
+			Iterator<T> iterator = iterator();
+			BasicTree<?> tree = (BasicTree<?>) object;
+			Iterator<?> treeIterator = tree.iterator();
+
+			// Skip the first node, which is this one, since it's already been
+			// compared above.
+			iterator.next();
+			treeIterator.next();
+
+			// Loop over all of the values in the tree and look for
+			// inconsistencies between the iterators.
+			while (equals && iterator.hasNext() && treeIterator.hasNext()) {
+				equals = iterator.next().equals(treeIterator.next());
+			}
+		}
+		return equals;
+	}
 
 	@Override
 	public int hashCode() {
-		int hash = super.hashCode();
-		Iterator<T> iterator = iterator();
-		while (iterator.hasNext()) {
-			hash += 31 * iterator.next().nodeHashCode();
+		// There is no information that is not directly related to its
+		// genealogy stored in the BasicTree. Two objects are only equal if they
+		// are the same object, thus, there is no fitting hash for a BasicTree.
+		return super.hashCode();
+	}
+
+	@Override
+	public final int hashCode(boolean fullTree) {
+		int hash = hashCode();
+		if (fullTree) {
+			// Loop over all descendants and add their hashes to the hash.
+			Iterator<T> iterator = iterator();
+			iterator.next();
+			while (iterator.hasNext()) {
+				hash += 31 * iterator.next().hashCode();
+			}
 		}
 		return hash;
 	}

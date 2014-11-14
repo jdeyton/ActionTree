@@ -27,17 +27,16 @@ public interface ITree<T extends ITree<T>> extends Iterable<T> {
 	public T getValue();
 
 	public boolean hasChild(T child);
-	
+
 	public boolean hasChildren();
-	
+
 	public Iterator<T> iterator(TreeIterationOrder order);
 
 	public T removeChild(int index);
 
 	public boolean removeChild(T child);
-	
-	public boolean nodeEquals(T otherNode);
-	public int nodeHashCode();
-	public void nodeCopy(T otherNode);
-	public T nodeClone();
+
+	public boolean equals(Object object, boolean fullTree);
+
+	public int hashCode(boolean fullTree);
 }
