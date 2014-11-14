@@ -259,7 +259,7 @@ public class ActionTree extends BasicTree<ActionTree> {
 	@Override
 	public boolean equals(Object object) {
 		boolean equals = super.equals(object);
-		if (!equals && object != null && object instanceof ActionTree) {
+		if (equals && object instanceof ActionTree) {
 			ActionTree tree = (ActionTree) object;
 
 			// TODO Compare the properties...

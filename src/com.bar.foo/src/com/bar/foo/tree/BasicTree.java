@@ -9,7 +9,35 @@ import com.bar.foo.tree.iterator.PostOrderTreeIterator;
 import com.bar.foo.tree.iterator.PreOrderTreeIterator;
 import com.bar.foo.tree.iterator.TreeIterationOrder;
 
-// TODO Documentation
+/**
+ * This class provides a basic implementation of {@link ITree}. It implements
+ * all of the applicable methods from {@code ITree}. The result is that a
+ * sub-class need only implement a few methods to provide a tree of that object
+ * type. For example, consider the following class:
+ * 
+ * <pre>
+ * <code>
+ * public class Foo extends {@literal BasicTree<Foo>} {
+ *     
+ *     public int bar = 1;
+ * 
+ *     {@literal @Override}
+ *     public Foo getValue() {
+ *         return this;
+ *     }
+ * }
+ * </code>
+ * </pre>
+ * 
+ * The end result of this example class is a tree of {@code Foo} nodes where
+ * each node maintains an integer value {@code bar}.
+ * 
+ * @author Jordan
+ *
+ * @param <T>
+ *            The type of node contained in the tree. This should be the class
+ *            name, e.g., {@code Foo} in the above example.
+ */
 public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 
 	/**
@@ -156,14 +184,56 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 		this.parent = parent;
 	}
 
+	/**
+	 * Performs a simple equality check with another object. Since no
+	 * information except tree structure is maintained in {@code BasicTree},
+	 * this method will only return true if the two objects are the same or if
+	 * the other object is a {@code BasicTree<T>} with the same type {@code T}.
+	 * <p>
+	 * Sub-classes should override this method and provide a better equality
+	 * check. For instance, if the sub-class has {@code String property}, then
+	 * the overridden {@code equals(Object)} should look like:
+	 * 
+	 * <pre>
+	 * <code>
+	 * boolean equals = super.equals(object);
+	 * // Note: The instanceof check will always be true if equals is true, but
+	 * // it is necessary to satisfy the Java compiler when casting the object.
+	 * if (equals && object instanceof T) {
+	 *     T t = (T) object;
+	 *     equals &= (property == null ? t.property == null : property.equals(t.property));
+	 *     // Compare other properties of the two objects...
+	 * }
+	 * return equals;
+	 * </code>
+	 * </pre>
+	 * 
+	 * <b>Note:</b> This method <i>should not traverse</i> its children to
+	 * determine their hash codes! This is already handled in
+	 * {@link #hashCode(boolean)} when the boolean is {@code true}.
+	 * </p>
+	 */
 	@Override
 	public boolean equals(Object object) {
 		// There is no information that is not directly related to its
 		// genealogy stored in the BasicTree. Thus, two objects are equal if
-		// they are the same or if they are both non-null BasicTrees.
-		return (this == object || (object != null && object instanceof BasicTree<?>));
+		// they are the same or if they are both non-null BasicTrees with the
+		// same generic type.
+		boolean equals = (this == object);
+		if (object != null && object instanceof BasicTree<?>) {
+			BasicTree<?> tree = (BasicTree<?>) object;
+			// It's not enough to check that it's a BasicTree, but it has to
+			// have the same generic type T.
+			equals = getValue().getClass().equals(tree.getValue().getClass());
+		}
+		return equals;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#equals(com.bar.foo.tree.ITree, boolean)
+	 */
 	@Override
 	public final boolean equals(ITree<T> object, boolean fullTree) {
 		boolean equals = equals(object);
@@ -199,13 +269,40 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 		return equals;
 	}
 
+	/**
+	 * Provides a hash code for a {@code BasicTree}. Since no information except
+	 * tree structure is maintained in {@code BasicTree}, the hash is always 0.
+	 * <p>
+	 * Sub-classes should override this method and provide a better hash. For
+	 * instance, if the sub-class has {@code String property}, then the
+	 * overridden {@code hashCode()} should look like:
+	 * 
+	 * <pre>
+	 * <code>
+	 * int hash = super.hashCode();
+	 * hash = hash * 31 + (property == null ? 0 : property.hashCode());
+	 * // Add other properties to the hash...
+	 * return hash;
+	 * </code>
+	 * </pre>
+	 * 
+	 * <b>Note:</b> This method <i>should not traverse</i> its children to
+	 * determine their hash codes! This is already handled in
+	 * {@link #hashCode(boolean)} when the boolean is {@code true}.
+	 * </p>
+	 */
 	@Override
 	public int hashCode() {
 		// There is no information that is not directly related to its
 		// genealogy stored in the BasicTree. There is no property to hash!
-		return super.hashCode();
+		return 0;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#hashCode(boolean)
+	 */
 	@Override
 	public final int hashCode(boolean fullTree) {
 		int hash = hashCode();
