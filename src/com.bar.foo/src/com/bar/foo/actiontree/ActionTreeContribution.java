@@ -191,7 +191,15 @@ public class ActionTreeContribution {
 					// Add the new ActionContributionItem to the
 					// ContributionManager.
 					item = getActionContributionItem();
-					manager.add(item);
+					// You can't use -1 as an index for ContributionManagers,
+					// so we need to set it on the first pass.
+					if (index >= 0) {
+						manager.insert(index, item);
+					} else {
+						index = manager.getSize();
+						manager.add(item);
+					}
+					return;
 				}
 
 				@Override

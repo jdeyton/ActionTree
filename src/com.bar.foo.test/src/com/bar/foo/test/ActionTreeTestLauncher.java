@@ -62,6 +62,9 @@ public class ActionTreeTestLauncher {
 		ActionTree tree = new ActionTree();
 		tree.text = "ActionTree";
 
+		// Try filling first, then refreshing after all children are added.
+		tree.fill(toolBarManager);
+
 		// Add a child.
 		ActionTree child1 = new ActionTree();
 		child1.setAction(new Action("Child1") {
@@ -96,17 +99,17 @@ public class ActionTreeTestLauncher {
 			}
 		});
 		child2.addChild(grandChild2);
-
-		// TODO Try filling first, then refreshing after all children are added.
-		tree.fill(toolBarManager);
+		
+		// Now try refreshing the tree.
+		tree.refresh();
 		// ------------------------------------------------------------ //
 
 		// ---- Add an ActionTree with children and a default action. ---- //
 		ActionTree treeDefaultAction = new ActionTree();
-		treeDefaultAction.setAction(new Action("ActionTree (default action)") {
+		treeDefaultAction.setAction(new Action("ActionTree (with set action)") {
 			@Override
 			public void run() {
-				System.out.println("ActionTree (default action)");
+				System.out.println("ActionTree (with set action)");
 			}
 		});
 

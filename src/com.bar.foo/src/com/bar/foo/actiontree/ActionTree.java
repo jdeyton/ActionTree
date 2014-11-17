@@ -141,6 +141,34 @@ public class ActionTree extends BasicTree<ActionTree> {
 	}
 
 	/**
+	 * Overrides the default behavior to refresh the {@code ActionTree}'s
+	 * {@link #contributions} when a child is added.
+	 */
+	@Override
+	public boolean addChild(ActionTree child) {
+		boolean added = super.addChild(child);
+		return added;
+	}
+
+	/**
+	 * Overrides the default behavior to refresh the {@code ActionTree}'s
+	 * {@link #contributions} when a child is removed.
+	 */
+	@Override
+	public ActionTree removeChild(int index) {
+		return super.removeChild(index);
+	}
+
+	/**
+	 * Overrides the default behavior to refresh the {@code ActionTree}'s
+	 * {@link #contributions} when a child is removed.
+	 */
+	@Override
+	public boolean removeChild(ActionTree child) {
+		return super.removeChild(child);
+	}
+
+	/**
 	 * Gets the {@link IMenuCreator} used to create context and sub-menus filled
 	 * with the {@code ActionTree}'s child {@code ActionTree}s.
 	 * 
