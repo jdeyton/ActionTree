@@ -199,6 +199,9 @@ public class ActionTreeContribution {
 						index = manager.getSize();
 						manager.add(item);
 					}
+					// This has to be called when items are added to a
+					// ContributionManager, otherwise they won't appear.
+					manager.update(true);
 					return;
 				}
 
