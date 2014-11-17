@@ -256,20 +256,42 @@ public class ActionTree extends BasicTree<ActionTree> {
 		return;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.BasicTree#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object object) {
 		boolean equals = super.equals(object);
-		if (equals && object instanceof ActionTree) {
+		// Note: The other object isn't null if the super method returns true.
+		if (this != object && object instanceof ActionTree) {
 			ActionTree tree = (ActionTree) object;
 
-			// TODO Compare the properties...
+			// Compare the following properties of an ActionTree:
+			// text, toolTipText, style, image, and action.
+			equals = (text == null ? tree.text == null : text.equals(tree.text))
+					&& (toolTipText == null ? tree.toolTipText == null
+							: toolTipText.equals(tree.toolTipText))
+					&& style == tree.style
+					&& (image == null ? tree.image == null : image
+							.equals(tree.image))
+					&& (action == null ? tree.action == null : action
+							.equals(tree.action));
 		}
 		return equals;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.BasicTree#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		int hash = super.hashCode();
+		// Add hashes for the following properties of an ActionTree:
+		// text, toolTipText, style, image, and action.
 		hash = hash * 31 + (text == null ? 0 : text.hashCode());
 		hash = hash * 31 + (toolTipText == null ? 0 : toolTipText.hashCode());
 		hash = hash * 31 + style;

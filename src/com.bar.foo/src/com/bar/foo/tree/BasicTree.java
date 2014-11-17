@@ -199,9 +199,9 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	 * boolean equals = super.equals(object);
 	 * // Note: The instanceof check will always be true if equals is true, but
 	 * // it is necessary to satisfy the Java compiler when casting the object.
-	 * if (equals && object instanceof T) {
+	 * if (equals && this != object && object instanceof T) {
 	 *     T t = (T) object;
-	 *     equals &= (property == null ? t.property == null : property.equals(t.property));
+	 *     equals = (property == null ? t.property == null : property.equals(t.property));
 	 *     // Compare other properties of the two objects...
 	 * }
 	 * return equals;
@@ -220,7 +220,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 		// they are the same or if they are both non-null BasicTrees with the
 		// same generic type.
 		boolean equals = (this == object);
-		if (object != null && object instanceof BasicTree<?>) {
+		if (!equals && object != null && object instanceof BasicTree<?>) {
 			BasicTree<?> tree = (BasicTree<?>) object;
 			// It's not enough to check that it's a BasicTree, but it has to
 			// have the same generic type T.

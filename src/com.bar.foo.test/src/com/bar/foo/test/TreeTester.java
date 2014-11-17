@@ -448,7 +448,7 @@ public class TreeTester {
 		@Override
 		public boolean equals(Object object) {
 			boolean equals = super.equals(object);
-			if (equals && object instanceof DummyTree) {
+			if (equals && this != object && object instanceof DummyTree) {
 				DummyTree tree = (DummyTree) object;
 				// Compare the string property.
 				equals &= (property == null ? tree.property == null : property
