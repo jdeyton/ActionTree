@@ -265,7 +265,7 @@ public class ActionTree extends BasicTree<ActionTree> {
 	public boolean equals(Object object) {
 		boolean equals = super.equals(object);
 		// Note: The other object isn't null if the super method returns true.
-		if (this != object && object instanceof ActionTree) {
+		if (equals && this != object && object instanceof ActionTree) {
 			ActionTree tree = (ActionTree) object;
 
 			// Compare the following properties of an ActionTree:

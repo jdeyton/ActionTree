@@ -53,8 +53,8 @@ public class ActionTreeTestLauncher {
 
 		// Add a basic ActionTree (no children). When clicked, this should
 		// generate a new child ActionTree and add it to the dynamic tree.
-		ActionTree basicActionTree = new ActionTree();
-		basicActionTree.setAction(new Action("ActionTree (adds children)") {
+		ActionTree addAction = new ActionTree();
+		addAction.setAction(new Action("Add (to Dynamic Tree)") {
 			@Override
 			public void run() {
 				// Get a name for a new child tree based on the number of
@@ -75,13 +75,34 @@ public class ActionTreeTestLauncher {
 				return;
 			}
 		});
-		basicActionTree.fill(toolBarManager);
+		addAction.fill(toolBarManager);
+
+		// Add a basic ActionTree (no children). When clicked, this should
+		// remove a child ActionTree from the dynamic tree.
+		ActionTree removeAction = new ActionTree();
+		removeAction.setAction(new Action("Remove (from Dynamic Tree)") {
+			@Override
+			public void run() {
+				// Get a name for a new child tree based on the number of
+				// children in the dynamic tree.
+				int count = dynamicTree.getNumberOfChildren();
+				if (count > 0) {
+					dynamicTree.removeChild(0);
+					dynamicTree.refresh();
+				} else {
+					System.out.println("No children in the dynamic tree...");
+				}
+				return;
+			}
+		});
+		removeAction.fill(toolBarManager);
 
 		// ---- Add an ActionTree with children and grandchildren. ---- //
-		dynamicTree.text = "ActionTree";
+		ActionTree tree = new ActionTree();
+		tree.text = "ActionTree";
 
 		// Try filling first, then refreshing after all children are added.
-		dynamicTree.fill(toolBarManager);
+		tree.fill(toolBarManager);
 
 		// Add a child.
 		ActionTree child1 = new ActionTree();
@@ -91,12 +112,12 @@ public class ActionTreeTestLauncher {
 				System.out.println("Child1");
 			}
 		});
-		dynamicTree.addChild(child1);
+		tree.addChild(child1);
 
 		// Add another child.
 		ActionTree child2 = new ActionTree();
 		child2.text = "Child2";
-		dynamicTree.addChild(child2);
+		tree.addChild(child2);
 
 		// Add a grandchild.
 		ActionTree grandChild1 = new ActionTree();
@@ -119,15 +140,14 @@ public class ActionTreeTestLauncher {
 		child2.addChild(grandChild2);
 
 		// Now try refreshing the tree.
-		dynamicTree.refresh();
+		tree.refresh();
 		// ------------------------------------------------------------ //
 
 		// ---- Add an ActionTree with children and a default action. ---- //
-		ActionTree treeDefaultAction = new ActionTree();
-		treeDefaultAction.setAction(new Action("ActionTree (with set action)") {
+		dynamicTree.setAction(new Action("Dynamic Tree") {
 			@Override
 			public void run() {
-				System.out.println("ActionTree (with set action)");
+				System.out.println("Some default action...");
 			}
 		});
 
@@ -139,7 +159,7 @@ public class ActionTreeTestLauncher {
 				System.out.println("Child1 (second tree)");
 			}
 		});
-		treeDefaultAction.addChild(child1);
+		dynamicTree.addChild(child1);
 
 		// Add another child.
 		child2 = new ActionTree();
@@ -149,9 +169,9 @@ public class ActionTreeTestLauncher {
 				System.out.println("Child2 (second tree)");
 			}
 		});
-		treeDefaultAction.addChild(child2);
+		dynamicTree.addChild(child2);
 
-		treeDefaultAction.fill(toolBarManager);
+		dynamicTree.fill(toolBarManager);
 		// --------------------------------------------------------------- //
 
 		// Refresh the ToolBar.
