@@ -287,10 +287,6 @@ public class ActionTreeTestLauncher {
 		}
 		display.dispose();
 
-		// Right now, this is the simplest way to halt the JME3 application.
-		// Otherwise, the program does not actually terminate.
-		System.exit(0);
-
 		return;
 	}
 
