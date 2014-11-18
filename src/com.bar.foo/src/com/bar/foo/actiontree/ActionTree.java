@@ -14,14 +14,62 @@ import org.eclipse.swt.widgets.ToolBar;
 import com.bar.foo.tree.BasicTree;
 
 /**
- * I prefer the BasicTree version because it's more concise. The developer also
- * does not need to make any calls to {@link #getValue()} when dealing with the
- * iterators, either. You also cannot define this class as
- * {@code ActionTree extends SimpleTree<ActionTree>} because you should call the
- * super constructor with the ActionTree itself as the value.
+ * An {@code ActionTree} is a {@link BasicTree tree}-based structure that
+ * contains JFace {@link Action}s. The intent of this class is to make it easy
+ * to create {@code Action}s that can be embedded simultaneously in multiple
+ * widgets (i.e., a {@code ToolBar} and a context {@code Menu}). Furthermore, it
+ * aims to make updating these embedded {@code Action}s easier to update or
+ * change on the fly.
  * 
- * TODO Update this documentation to describe the default behavior of the
- * ActionTree.
+ * <p>
+ * The below list describes the behavior of {@code ActionTree}s when added to
+ * supported widgets like {@link ToolBar}s, {@link Menu}s, and JFace
+ * {@link ContributionManager}s.
+ * </p>
+ * 
+ * <ul>
+ * <li>If an {@code ActionTree} has children:
+ * <ul>
+ * <li>When added to a {@code ToolBar} or {@code ToolBarManager}, it is a
+ * {@code ToolItem} as follows:
+ * <ul>
+ * <li>If its {@code Action} is set, clicking the button will perform the
+ * {@code Action}. Clicking on the arrow will produce a drop-down.</li>
+ * <li>Otherwise, if its {@code Action} is not set, clicking the button or its
+ * arrow will produce a drop-down {@code Menu} composed of its children.</li>
+ * </ul>
+ * </li>
+ * <li>When added to a {@code Menu} or {@code MenuManager}, it is a
+ * {@code MenuItem} as follows:
+ * <ul>
+ * <li>It has a sub-menu composed of its children. No action is performed if
+ * clicked.</li>
+ * </ul>
+ * </li>
+ * </ul>
+ * </li>
+ * <li>Otherwise, if an {@code ActionTree} has no children:
+ * <ul>
+ * <li>When added to a {@code ToolBar} or {@code ToolBarManager}, it is a
+ * {@code ToolItem} as follows:
+ * <ul>
+ * <li>If its {@code Action} is set, clicking the button will perform the
+ * {@code Action}. There is no arrow.</li>
+ * <li>Otherwise, if its {@code Action} is not set, the button is disabled.
+ * There is no arrow.</li>
+ * </ul>
+ * </li>
+ * <li>When added to a {@code Menu} or {@code MenuManager}, it is a
+ * {@code MenuItem} as follows:
+ * <ul>
+ * <li>If its {@code Action} is set, clicking it will perform the {@code Action}
+ * .</li>
+ * <li>Otherwise, if its {@code Action} is not set, it is disabled.</li>
+ * </ul>
+ * </li>
+ * </ul>
+ * </li>
+ * </ul>
  * 
  * @author Jordan
  * 
@@ -30,6 +78,10 @@ public class ActionTree extends BasicTree<ActionTree> {
 
 	// TODO The contribution should be disabled if the menu is empty, there is
 	// no default action, or if enabled is set to false.
+
+	// TODO Make a new sub-class for "radio style" selection. As a dropdown
+	// menu, the sub-menu items should have checkboxes, but only one is selected
+	// at a time.
 
 	/**
 	 * The default {@link #text}, "(ActionTree)"
@@ -137,7 +189,13 @@ public class ActionTree extends BasicTree<ActionTree> {
 	 *            node in the tree will be copied.
 	 */
 	public ActionTree(ActionTree tree, boolean fullTree) {
-		// TODO
+		this(tree);
+
+		if (fullTree) {
+			// TODO Copy all of the descendants of the other tree into this one.
+		}
+
+		return;
 	}
 
 	/**
@@ -301,6 +359,11 @@ public class ActionTree extends BasicTree<ActionTree> {
 	}
 
 	// ---- Extends ITree<T> ---- //
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#getValue()
+	 */
 	@Override
 	public ActionTree getValue() {
 		return this;
