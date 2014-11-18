@@ -28,56 +28,33 @@ import com.bar.foo.tree.BasicTree;
  * </p>
  * 
  * <ul>
- * <li>If an {@code ActionTree} has children:
+ * <li>If an {@code ActionTree} has children, it will have a dropdown (when
+ * added to a {@code ToolBar}) or a sub-menu (when added to a {@code Menu}). The
+ * {@link #style} of the {@code Action} will be overridden with
+ * {@link IAction#AS_DROP_DOWN_MENU}. If added to a {@code ToolBar}, then
+ * clicking the button will do one of the following:
  * <ul>
- * <li>When added to a {@code ToolBar} or {@code ToolBarManager}, it is a
- * {@code ToolItem} as follows:
- * <ul>
- * <li>If its {@code Action} is set, clicking the button will perform the
- * {@code Action}. Clicking on the arrow will produce a drop-down.</li>
- * <li>Otherwise, if its {@code Action} is not set, clicking the button or its
- * arrow will produce a drop-down {@code Menu} composed of its children.</li>
+ * <li>If its {@code Action} is not set, clicking the button will create the
+ * dropdown just like clicking the arrow next to it.</li>
+ * <li>Otherwise, if its {@code Action is set, clicking the button will perform
+ * the specified {@link #action}.</li>
  * </ul>
  * </li>
- * <li>When added to a {@code Menu} or {@code MenuManager}, it is a
- * {@code MenuItem} as follows:
+ * <li>Otherwise, if an {@code ActionTree} does <i>not</i> have children, it
+ * will <i>not</i>, by default, have a dropdown or sub-menu. Clicking it will do
+ * one of the following:
  * <ul>
- * <li>It has a sub-menu composed of its children. No action is performed if
- * clicked.</li>
+ * <li>If its {@code Action} is not set, it will be disabled.</li>
+ * <li>Otherwise, if its {@code Action} is set, clicking it will be disabled.</li>
  * </ul>
  * </li>
- * </ul>
- * </li>
- * <li>Otherwise, if an {@code ActionTree} has no children:
- * <ul>
- * <li>When added to a {@code ToolBar} or {@code ToolBarManager}, it is a
- * {@code ToolItem} as follows:
- * <ul>
- * <li>If its {@code Action} is set, clicking the button will perform the
- * {@code Action}. There is no arrow.</li>
- * <li>Otherwise, if its {@code Action} is not set, the button is disabled.
- * There is no arrow.</li>
- * </ul>
- * </li>
- * <li>When added to a {@code Menu} or {@code MenuManager}, it is a
- * {@code MenuItem} as follows:
- * <ul>
- * <li>If its {@code Action} is set, clicking it will perform the {@code Action}
- * .</li>
- * <li>Otherwise, if its {@code Action} is not set, it is disabled.</li>
- * </ul>
- * </li>
- * </ul>
- * </li>
- * </ul>
  * 
  * @author Jordan
  * 
  */
 public class ActionTree extends BasicTree<ActionTree> {
 
-	// TODO The contribution should be disabled if the menu is empty, there is
-	// no default action, or if enabled is set to false.
+	// TODO Implement the ability to disable the ActionTree.
 
 	// TODO Make a new sub-class for "radio style" selection. As a dropdown
 	// menu, the sub-menu items should have checkboxes, but only one is selected

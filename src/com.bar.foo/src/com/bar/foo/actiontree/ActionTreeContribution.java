@@ -248,6 +248,9 @@ public class ActionTreeContribution {
 	 */
 	private ActionContributionItem getActionContributionItem() {
 
+		// The code below is structured roughly the same as the documentation
+		// for ActionTree.
+
 		// If the item is uninitialized, we need to create it.
 		if (item == null) {
 			IAction action = actionTree.getAction();
@@ -294,10 +297,11 @@ public class ActionTreeContribution {
 				action.setText(actionTree.text);
 				action.setToolTipText(actionTree.toolTipText);
 				action.setImageDescriptor(actionTree.image);
+				// Add a MenuCreator so that a dropdown- or sub-menu will show.
 				action.setMenuCreator(actionTree.getMenuCreator());
 			} else if (action == null) {
 				// If no action is set, we need to create a dummy Action.
-				action = new Action(actionTree.text) {
+				action = new Action(actionTree.text, actionTree.style) {
 					@Override
 					public void run() {
 						// Do nothing.
@@ -307,8 +311,14 @@ public class ActionTreeContribution {
 				action.setText(actionTree.text);
 				action.setToolTipText(actionTree.toolTipText);
 				action.setImageDescriptor(actionTree.image);
+				// No Action is set and there are no children, so disable the
+				// placeholder action.
+				action.setEnabled(false);
 			}
-			action.setEnabled(actionTree.enabled);
+			// If the ActionTree is disabled, disable the exposed Action.
+			if (!actionTree.enabled) {
+				action.setEnabled(false);
+			}
 			// We can now create the ActionContributionItem. Note that
 			// ActionTrees without children will not have a Menu.
 			item = new ActionContributionItem(action);
