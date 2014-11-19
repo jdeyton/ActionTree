@@ -7,6 +7,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Menu;
@@ -253,13 +254,37 @@ public class ActionTreeContribution {
 
 		// If the item is uninitialized, we need to create it.
 		if (item == null) {
-			IAction action = actionTree.getAction();
+			// Get the current Action for the ActionTree.
+			IAction action = actionTree.action;
+
+			// Load the current Action properties.
+			String text = actionTree.text;
+			String toolTipText = actionTree.toolTipText;
+			Integer style = actionTree.style;
+			ImageDescriptor image = actionTree.image;
+
+			// If the Action is set and any property unset, try to set the
+			// property based on the ones available in the Action.
+			if (action != null) {
+				text = (text == null ? action.getText() : text);
+				toolTipText = (toolTipText == null ? action.getToolTipText()
+						: toolTipText);
+				style = (style == null ? action.getStyle() : style);
+				image = (image == null ? action.getImageDescriptor() : image);
+			}
+
+			// We cannot have a null style! Default to a button style.
+			if (style == null) {
+				style = Action.AS_PUSH_BUTTON;
+			}
+
 			if (actionTree.hasChildren()) {
+				// The style is overridden so we can get a dropdown/sub-menu.
+				style = Action.AS_DROP_DOWN_MENU;
 				if (action == null) {
 					// Create a dropdown-style Action whose default click brings
 					// up the child Menu.
-					action = new Action(actionTree.text,
-							Action.AS_DROP_DOWN_MENU) {
+					action = new Action(text, style) {
 						@Override
 						public void run() {
 							// Get the corresponding ToolItem and Menu.
@@ -285,40 +310,51 @@ public class ActionTreeContribution {
 				} else {
 					// Create a dropdown-style Action whose default click action
 					// re-directs to the ActionTree.
-					action = new Action(actionTree.text,
-							Action.AS_DROP_DOWN_MENU) {
+					final IAction defaultAction = action;
+					action = new Action(text, style) {
 						@Override
 						public void run() {
-							actionTree.getAction().run();
+							defaultAction.run();
 						}
 					};
 				}
-				// Configure the new Action just like the ActionTree.
-				action.setText(actionTree.text);
-				action.setToolTipText(actionTree.toolTipText);
-				action.setImageDescriptor(actionTree.image);
 				// Add a MenuCreator so that a dropdown- or sub-menu will show.
 				action.setMenuCreator(actionTree.getMenuCreator());
+
 			} else if (action == null) {
 				// If no action is set, we need to create a dummy Action.
-				action = new Action(actionTree.text, actionTree.style) {
+				action = new Action(text, style) {
 					@Override
 					public void run() {
 						// Do nothing.
 					}
 				};
-				// Configure the new Action just like the ActionTree.
-				action.setText(actionTree.text);
-				action.setToolTipText(actionTree.toolTipText);
-				action.setImageDescriptor(actionTree.image);
 				// No Action is set and there are no children, so disable the
 				// placeholder action.
 				action.setEnabled(false);
+			} else {
+				// Lastly, the ActionTree has no children, but does have an
+				// Action. Create a wrapper action that has the style/properties
+				// of the ActionTree.
+				final IAction defaultAction = action;
+				action = new Action(text, style) {
+					@Override
+					public void run() {
+						defaultAction.run();
+					}
+				};
 			}
+
 			// If the ActionTree is disabled, disable the exposed Action.
 			if (!actionTree.enabled) {
 				action.setEnabled(false);
 			}
+
+			// Update the unset properties of the exposed Action.
+			// Text and style are already set!
+			action.setToolTipText(toolTipText);
+			action.setImageDescriptor(image);
+
 			// We can now create the ActionContributionItem. Note that
 			// ActionTrees without children will not have a Menu.
 			item = new ActionContributionItem(action);

@@ -22,6 +22,13 @@ import com.bar.foo.tree.BasicTree;
  * change on the fly.
  * 
  * <p>
+ * The {@link #action} associated with the {@code ActionTree} can be set
+ * directly. However, if properties like {@link #text}, {@link #style}, or
+ * {@link #image} are set to non-default values, they will override the settings
+ * of the {@code Action}.
+ * </p>
+ * 
+ * <p>
  * The below list describes the behavior of {@code ActionTree}s when added to
  * supported widgets like {@link ToolBar}s, {@link Menu}s, and JFace
  * {@link ContributionManager}s.
@@ -59,38 +66,21 @@ public class ActionTree extends BasicTree<ActionTree> {
 	// TODO Make a new sub-class for "radio style" selection. As a dropdown
 	// menu, the sub-menu items should have checkboxes, but only one is selected
 	// at a time.
-
-	/**
-	 * The default {@link #text}, "(ActionTree)"
-	 */
-	private static final String defaultText = "(ActionTree)";
-	/**
-	 * The default {@link #toolTipText}, (no tool tip, or null).
-	 */
-	private static final String defaultToolTipText = null;
 	/**
 	 * The default {@link #style}, {@link IAction#AS_PUSH_BUTTON}.
 	 */
-	private static final int defaultStyle = Action.AS_PUSH_BUTTON;
-	/**
-	 * The default {@link #image}, (no image, or null).
-	 */
-	private static final ImageDescriptor defaultImage = null;
+	public static final int defaultStyle = Action.AS_PUSH_BUTTON;
 
 	/**
 	 * The string displayed for the {@code ActionTree}'s contributions to
 	 * widgets.
-	 * 
-	 * @see #defaultText
 	 */
-	public String text = defaultText;
+	public String text = null;
 	/**
 	 * The string displayed for the tool tip of the {@code ActionTree}'s
 	 * contributions to widgets, if applicable.
-	 * 
-	 * @see defaultToolTipText
 	 */
-	public String toolTipText = defaultToolTipText;
+	public String toolTipText = null;
 	/**
 	 * The style of the {@code ActionTree}'s contributions to widgets. This
 	 * should be set based on the styles set in the class {@link Action}, e.g.,
@@ -98,13 +88,17 @@ public class ActionTree extends BasicTree<ActionTree> {
 	 * 
 	 * @see #defaultStyle
 	 */
-	public int style = defaultStyle;
+	public Integer style = null;
 	/**
 	 * The image used for the {@code ActionTree}'s contributions to widgets.
-	 * 
-	 * @see #defaultImage
 	 */
-	public ImageDescriptor image = defaultImage;
+	public ImageDescriptor image = null;
+	/**
+	 * The default {@link Action} associated with this {@code ActionTree}. If
+	 * null, then the {@link ActionTree default behavior of the ActionTree} will
+	 * take effect.
+	 */
+	public IAction action = null;
 
 	/**
 	 * Whether or not the {@code ActionTree} should be disabled.
@@ -115,13 +109,6 @@ public class ActionTree extends BasicTree<ActionTree> {
 	 * </p>
 	 */
 	public boolean enabled = true;
-
-	/**
-	 * The default {@link Action} associated with this {@code ActionTree}. If
-	 * null, then the {@link ActionTree default behavior of the ActionTree} will
-	 * take effect.
-	 */
-	private IAction action = null;
 
 	/**
 	 * A map containing the {@code ActionTree}'s contributions--stored as
@@ -186,46 +173,6 @@ public class ActionTree extends BasicTree<ActionTree> {
 			menuCreator = new ActionTreeMenuCreator(this);
 		}
 		return menuCreator;
-	}
-
-	/**
-	 * Gets the current {@link #action} associated with this {@code ActionTree}.
-	 * This value may be null, in which case the {@link ActionTree default
-	 * behavior of the ActionTree} will take effect.
-	 * 
-	 * @return The {@code ActionTree}'s associated JFace {@code Action}.
-	 */
-	public IAction getAction() {
-		return action;
-	}
-
-	/**
-	 * Sets the current {@link #action} associated with this {@code ActionTree}.
-	 * 
-	 * @param action
-	 *            If not null, then the related properties ({@link #text},
-	 *            {@link #image}, and such) will be synchronized with the
-	 *            {@code Action}. If null, then the {@link ActionTree default
-	 *            behavior of the ActionTree} will take effect.
-	 */
-	public void setAction(IAction action) {
-		// If the Action is not null, update the other properties.
-		if (action != null) {
-			text = action.getText();
-			toolTipText = action.getToolTipText();
-			style = action.getStyle();
-			image = action.getImageDescriptor();
-		}
-		// If the Action is null, set the properties to their defaults.
-		else {
-			text = defaultText;
-			toolTipText = defaultToolTipText;
-			style = defaultStyle;
-			image = defaultImage;
-		}
-		this.action = action;
-
-		return;
 	}
 
 	/**
