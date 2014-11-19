@@ -12,3 +12,4 @@ Import-Package: org.eclipse.core.commands,
  org.eclipse.swt,
  org.eclipse.swt.events,
  org.eclipse.swt.layout
+Bundle-ClassPath: resources/
