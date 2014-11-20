@@ -66,7 +66,8 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	 *            copied, not including its descendants.
 	 */
 	protected BasicTree(BasicTree<T> tree) {
-		// TODO
+		// Nothing to do. There is no state information maintained in this class
+		// other than its relatives in the tree.
 	}
 
 	/**
@@ -81,9 +82,15 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	 *            node in the tree will be copied.
 	 */
 	protected BasicTree(BasicTree<T> tree, boolean fullTree) {
-		// TODO
+		// This method cannot be implemented because the local (non-traversing)
+		// constructor for T cannot be inferred.
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#addChild(com.bar.foo.tree.ITree)
+	 */
 	@Override
 	public boolean addChild(T child) {
 		boolean added = false;
@@ -100,41 +107,83 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 		return added;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#getChild(int)
+	 */
 	@Override
 	public T getChild(int index) {
 		return children.get(index);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#getChildren()
+	 */
 	@Override
 	public List<T> getChildren() {
 		return new ArrayList<T>(children);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#getNumberOfChildren()
+	 */
 	@Override
 	public int getNumberOfChildren() {
 		return children.size();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#getParent()
+	 */
 	@Override
 	public T getParent() {
 		return parent;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#hasChild(com.bar.foo.tree.ITree)
+	 */
 	@Override
 	public boolean hasChild(T child) {
 		return children.contains(child);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#hasChildren()
+	 */
 	@Override
 	public boolean hasChildren() {
 		return !children.isEmpty();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Iterable#iterator()
+	 */
 	@Override
 	public Iterator<T> iterator() {
 		return iterator(TreeIterationOrder.BreadthFirst);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.bar.foo.tree.ITree#iterator(com.bar.foo.tree.iterator.TreeIterationOrder
+	 * )
+	 */
 	@Override
 	public Iterator<T> iterator(TreeIterationOrder order) {
 		Iterator<T> iterator = null;
@@ -156,6 +205,11 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 		return iterator;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#removeChild(int)
+	 */
 	@Override
 	public T removeChild(int index) {
 		T child = children.remove(index);
@@ -165,6 +219,11 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 		return child;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bar.foo.tree.ITree#removeChild(com.bar.foo.tree.ITree)
+	 */
 	@Override
 	public boolean removeChild(T child) {
 		boolean removed = children.remove(child);
@@ -242,10 +301,8 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 			BasicTree<T> tree = (BasicTree<T>) object;
 
 			// Grab breadth-first iterators for these trees.
-			T root = getValue();
-			T treeRoot = tree.getValue();
-			Iterator<T> iterator = new BreadthFirstTreeIterator<T>(root);
-			Iterator<T> treeIterator = new BreadthFirstTreeIterator<T>(treeRoot);
+			Iterator<T> iterator = tree.iterator(TreeIterationOrder.BreadthFirst);
+			Iterator<T> treeIterator = iterator(TreeIterationOrder.BreadthFirst);
 
 			// Skip the first node, which is this one, since it's already been
 			// compared above.
