@@ -1,4 +1,4 @@
-package com.bar.foo.test;
+package com.bar.foo.actiontree.test;
 
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
