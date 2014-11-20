@@ -1,17 +1,21 @@
 package com.bar.foo.actiontree;
 
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Stack;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ContributionManager;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolBar;
 
 import com.bar.foo.tree.BasicTree;
+import com.bar.foo.tree.iterator.TreeIterationOrder;
 
 /**
  * An {@code ActionTree} is a {@link BasicTree tree}-based structure that
@@ -138,7 +142,31 @@ public class ActionTree extends BasicTree<ActionTree> {
 	 *            copied, not including its descendants.
 	 */
 	public ActionTree(ActionTree tree) {
-		// TODO
+		// Set up the defaults.
+		this();
+
+		// If possible, copy all of the tree's properties.
+		if (tree != null) {
+			text = tree.text;
+			toolTipText = tree.toolTipText;
+			style = tree.style;
+			// Deep copy the ImageDescriptor since this is a resource that can
+			// be destroyed.
+			if (tree.image != null) {
+				ImageData imageData = tree.image.getImageData();
+				image = ImageDescriptor.createFromImageData(imageData);
+			}
+			// We cannot clone or create a duplicate action because its run
+			// method cannot be copied.
+			tree.action = action;
+		}
+		// If necessary, throw an exception when the source tree is null.
+		else {
+			throw new IllegalArgumentException("ActionTree error: "
+					+ "Cannot copy from null tree.");
+		}
+
+		return;
 	}
 
 	/**
@@ -153,10 +181,48 @@ public class ActionTree extends BasicTree<ActionTree> {
 	 *            node in the tree will be copied.
 	 */
 	public ActionTree(ActionTree tree, boolean fullTree) {
+		// First, perform the standard, local copy constructor.
 		this(tree);
 
-		if (fullTree) {
-			// TODO Copy all of the descendants of the other tree into this one.
+		// If necessary, walk the other tree and copy all child nodes.
+		if (tree != null && fullTree) {
+			// Get a pre-order iterator to walk the other tree.
+			Iterator<ActionTree> iterator;
+			iterator = tree.iterator(TreeIterationOrder.PreOrder);
+			// Skip the root node since it's already been copied.
+			ActionTree node = iterator.next();
+			ActionTree child;
+
+			// Create two stacks: one to contain the current parent, and one to
+			// contain how many children remain to be copied.
+			Stack<ActionTree> parents = new Stack<ActionTree>();
+			parents.push(getValue());
+			Stack<Integer> childCounts = new Stack<Integer>();
+			childCounts.push(node.getNumberOfChildren());
+
+			while (iterator.hasNext()) {
+				// Get the next node and copy it.
+				node = iterator.next();
+				child = new ActionTree(node);
+
+				// Add the child to its parent and decrement the number of
+				// children remaining to be copied for the current parent. If no
+				// children are left, remove the parent and its remaining count.
+				parents.peek().addChild(child);
+				int remainingChildren = childCounts.pop() - 1;
+				if (remainingChildren > 0) {
+					parents.pop();
+				} else {
+					childCounts.push(remainingChildren);
+				}
+
+				// If the copied node has children, we need to update the two
+				// stacks so its children are added.
+				if (node.hasChildren()) {
+					parents.push(child);
+					childCounts.push(node.getNumberOfChildren());
+				}
+			}
 		}
 
 		return;
