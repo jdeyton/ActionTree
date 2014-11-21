@@ -2,6 +2,7 @@ package com.bar.foo.tree.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -137,7 +138,9 @@ public class TreeTester {
 		// ---------------------------------------- //
 
 		// ---- Check the base case: two single nodes. ---- //
-		equalObject = new DummyTree();
+		// The references are not the same.
+		assertNotSame(object, equalObject);
+
 		// Check the default equals method in both directions.
 		// Reflexive check.
 		assertTrue(object.equals(object));
@@ -164,6 +167,11 @@ public class TreeTester {
 		unequalObject = new DummyTree();
 		object.property = "derp";
 		equalObject.property = "derp";
+
+		// The references are not the same.
+		assertNotSame(object, equalObject);
+		assertNotSame(object, unequalObject);
+		assertNotSame(equalObject, unequalObject);
 
 		// The next tests check equality between object and equalObject.
 
@@ -261,6 +269,11 @@ public class TreeTester {
 		tree2 = new DummyTree();
 		tree2.property = "D";
 		unequalObject.addChild(tree2); // Different!
+
+		// The references are not the same.
+		assertNotSame(object, equalObject);
+		assertNotSame(object, unequalObject);
+		assertNotSame(equalObject, unequalObject);
 
 		// The next tests check equality between object and equalObject.
 

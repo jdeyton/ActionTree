@@ -10,7 +10,6 @@ import org.eclipse.jface.action.ContributionManager;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolBar;
 
@@ -81,6 +80,11 @@ public class ActionTree extends BasicTree<ActionTree> {
 	 * contributions to widgets, if applicable.
 	 */
 	public String toolTipText = null;
+	// TODO Simply having the style as an Integer will not suffice, as the
+	// hashCode will be the same for style == null and style == 0, even though
+	// these do not imply the same thing. We must wrap the value instead of
+	// making it publicly accessible so we can enforce the allowed values, or we
+	// can use an enum.
 	/**
 	 * The style of the {@code ActionTree}'s contributions to widgets. This
 	 * should be set based on the styles set in the class {@link Action}, e.g.,
@@ -146,15 +150,12 @@ public class ActionTree extends BasicTree<ActionTree> {
 			text = tree.text;
 			toolTipText = tree.toolTipText;
 			style = tree.style;
-			// Deep copy the ImageDescriptor since this is a resource that can
-			// be destroyed.
-			if (tree.image != null) {
-				ImageData imageData = tree.image.getImageData();
-				image = ImageDescriptor.createFromImageData(imageData);
-			}
+			// We cannot clone or create a duplicate image because
+			// ImageDescriptor does not override Object.equals(Object).
+			image = tree.image;
 			// We cannot clone or create a duplicate action because its run
 			// method cannot be copied.
-			tree.action = action;
+			action = tree.action;
 		}
 		// If necessary, throw an exception when the source tree is null.
 		else {
@@ -207,9 +208,9 @@ public class ActionTree extends BasicTree<ActionTree> {
 				parents.peek().addChild(child);
 				int remainingChildren = childCounts.pop() - 1;
 				if (remainingChildren > 0) {
-					parents.pop();
-				} else {
 					childCounts.push(remainingChildren);
+				} else {
+					parents.pop();
 				}
 
 				// If the copied node has children, we need to update the two
@@ -318,10 +319,8 @@ public class ActionTree extends BasicTree<ActionTree> {
 					&& (toolTipText == null ? tree.toolTipText == null
 							: toolTipText.equals(tree.toolTipText))
 					&& style == tree.style
-					&& (image == null ? tree.image == null : image
-							.equals(tree.image))
-					&& (action == null ? tree.action == null : action
-							.equals(tree.action));
+					&& image == tree.image
+					&& action == tree.action;
 		}
 		return equals;
 	}

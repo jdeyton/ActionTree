@@ -2,7 +2,9 @@ package com.bar.foo.actiontree.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.eclipse.jface.action.Action;
 import org.junit.Test;
@@ -26,7 +28,128 @@ public class ActionTreeTester {
 	@Test
 	public void checkCopy() {
 
-		// TODO
+		ActionTree object = null;
+		ActionTree copy;
+
+		// ---- Try invalid arguments to the copy constructor. ---- //
+		// Test the local copy constructor.
+		try {
+			copy = null;
+			copy = new ActionTree(object);
+			fail("ActionTreeTester failure: "
+					+ "Exception was not thrown for invalid constructor argument.");
+		} catch (IllegalArgumentException e) {
+			// It works as it should.
+		}
+
+		// Test the full tree copy constructor.
+		try {
+			copy = null;
+			copy = new ActionTree(object, false);
+			fail("ActionTreeTester failure: "
+					+ "Exception was not thrown for invalid constructor argument.");
+		} catch (IllegalArgumentException e) {
+			// It works as it should.
+		}
+
+		// Test the full tree copy constructor.
+		try {
+			copy = null;
+			copy = new ActionTree(object, true);
+			fail("ActionTreeTester failure: "
+					+ "Exception was not thrown for invalid constructor argument.");
+		} catch (IllegalArgumentException e) {
+			// It works as it should.
+		}
+		// -------------------------------------------------------- //
+
+		// ---- Base case: single, default ActionTree. ---- //
+		object = new ActionTree();
+
+		// Test the local copy constructor.
+		copy = null;
+		copy = new ActionTree(object);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+		// Test the full tree copy constructor.
+		copy = null;
+		copy = new ActionTree(object, false);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+		// Test the full tree copy constructor.
+		copy = null;
+		copy = new ActionTree(object, true);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+		// ------------------------------------------------ //
+
+		// ---- Try a single, non-default ActionTree. ---- //
+		object = new ActionTree();
+		object.text = "text";
+		object.toolTipText = "This is a tooltip. This is helpful.";
+		object.style = Action.AS_UNSPECIFIED;
+		object.action = new Action("This is an Action.") {
+			@Override
+			public void run() {
+				// Running!
+			}
+		};
+
+		// Test the local copy constructor.
+		copy = null;
+		copy = new ActionTree(object);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+		// Test the full tree copy constructor.
+		copy = null;
+		copy = new ActionTree(object, false);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+		// Test the full tree copy constructor.
+		copy = null;
+		copy = new ActionTree(object, true);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+		// ----------------------------------------------- //
+
+		// ---- Try a more complicated tree with children. ---- //
+		ActionTree tree1;
+		ActionTree tree2;
+
+		tree1 = new ActionTree();
+		tree1.toolTipText = "B";
+		object.addChild(tree1);
+		tree1 = new ActionTree();
+		tree1.style = Action.AS_CHECK_BOX;
+		object.addChild(tree1);
+		tree2 = new ActionTree();
+		tree2.action = object.action;
+		tree1.addChild(tree2);
+		// This shouldn't matter.
+		tree2.enabled = false;
+
+		// Test the local copy constructor.
+		copy = null;
+		copy = new ActionTree(object);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+		// Test the full tree copy constructor.
+		copy = null;
+		copy = new ActionTree(object, false);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+		// Test the full tree copy constructor.
+		copy = null;
+		copy = new ActionTree(object, true);
+		assertNotSame(object, copy);
+		assertEquals(object, copy);
+
+		// The enabled flag of the grandchild should be true, unlike tree2!
+		assertFalse(tree2.enabled);
+		ActionTree tree2Copy = copy.getChild(1).getChild(0);
+		assertTrue(tree2Copy.enabled);
+		assertEquals(tree2, tree2Copy);
+		// ---------------------------------------------------- //
 
 		return;
 	}
@@ -55,6 +178,9 @@ public class ActionTreeTester {
 		// ---------------------------------------- //
 
 		// ---- Check the base case: two default trees. ---- //
+		// The references are not the same.
+		assertNotSame(object, equalObject);
+
 		// Check the default equals method in both directions.
 		// Reflexive check.
 		assertTrue(object.equals(object));
@@ -78,9 +204,37 @@ public class ActionTreeTester {
 		// ------------------------------------------------- //
 
 		// ---- Try changing the properties. ---- //
+		object = new ActionTree();
+		equalObject = new ActionTree();
 		unequalObject = new ActionTree();
+		// TODO Add an ImageDescriptor to these objects.
+
+		// Set up the object, equalObject, and unequalObject.
 		object.text = "derp";
+		object.toolTipText = "woot";
+		object.style = Action.AS_PUSH_BUTTON;
+		object.action = new Action("Hey hey hey!") {
+			@Override
+			public void run() {
+				// Can't catch me, fast as can be!
+			}
+		};
 		equalObject.text = "derp";
+		equalObject.toolTipText = "woot";
+		equalObject.style = Action.AS_PUSH_BUTTON;
+		// The action must be the same reference since Action doesn't override
+		// Object.equals(Object)!
+		equalObject.action = object.action;
+		// TODO Add an ImageDescriptor.
+		unequalObject.text = "derp";
+		unequalObject.toolTipText = "woot!"; // Different!
+		unequalObject.style = Action.AS_PUSH_BUTTON;
+		unequalObject.action = object.action;
+
+		// The references are not the same.
+		assertNotSame(object, equalObject);
+		assertNotSame(object, unequalObject);
+		assertNotSame(equalObject, unequalObject);
 
 		// The next tests check equality between object and equalObject.
 
@@ -192,8 +346,13 @@ public class ActionTreeTester {
 		// Note: The Action must be the same object because two Actions cannot
 		// otherwise satisfy Action.equals(Object).
 		tree2.action = action;
-		unequalObject.addChild(tree2);
+		unequalObject.addChild(tree2); // Different!
 		tree2.enabled = true;
+
+		// The references are not the same.
+		assertNotSame(object, equalObject);
+		assertNotSame(object, unequalObject);
+		assertNotSame(equalObject, unequalObject);
 
 		// The next tests check equality between object and equalObject.
 
@@ -251,6 +410,9 @@ public class ActionTreeTester {
 		assertTrue(equalObject.hashCode(false) == unequalObject.hashCode(false));
 		assertFalse(equalObject.hashCode(true) == unequalObject.hashCode(true));
 		// -------------------------------------- //
+
+		// TODO Check that Actions that do the same thing cannot be equal.
+		// TODO Check that ImageDescriptors that are "copies" cannot be equal.
 
 		return;
 	}
