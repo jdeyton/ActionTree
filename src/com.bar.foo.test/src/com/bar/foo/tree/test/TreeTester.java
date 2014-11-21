@@ -165,6 +165,8 @@ public class TreeTester {
 		object.property = "derp";
 		equalObject.property = "derp";
 
+		// The next tests check equality between object and equalObject.
+
 		// Check the default equals method in both directions.
 		// Reflexive check.
 		assertTrue(object.equals(object));
@@ -185,6 +187,9 @@ public class TreeTester {
 		assertEquals(object.hashCode(), equalObject.hashCode());
 		assertEquals(object.hashCode(false), equalObject.hashCode(false));
 		assertEquals(object.hashCode(true), equalObject.hashCode(true));
+
+		// The next tests check inequality between object and unequalObject and
+		// between equalObject and unequalObject.
 
 		// Check the default equals against the unequal object.
 		assertFalse(object.equals(unequalObject));
@@ -215,6 +220,7 @@ public class TreeTester {
 		// ---- Try a more complicated tree. ---- //
 		DummyTree tree1;
 		DummyTree tree2;
+
 		// Create a tree with 4 elements as follows:
 		// Breadth first order: ABCD, A has children B and C, C has child D.
 		object = new DummyTree();
@@ -256,6 +262,8 @@ public class TreeTester {
 		tree2.property = "D";
 		unequalObject.addChild(tree2); // Different!
 
+		// The next tests check equality between object and equalObject.
+
 		// Check the default equals method in both directions.
 		// Reflexive check.
 		assertTrue(object.equals(object));
@@ -276,6 +284,9 @@ public class TreeTester {
 		assertEquals(object.hashCode(), equalObject.hashCode());
 		assertEquals(object.hashCode(false), equalObject.hashCode(false));
 		assertEquals(object.hashCode(true), equalObject.hashCode(true));
+
+		// The next tests check inequality between object and unequalObject and
+		// between equalObject and unequalObject.
 
 		// Check the default equals against the unequal object.
 		// Note: This will return true because the tree's structure is not

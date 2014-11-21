@@ -70,10 +70,6 @@ public class ActionTree extends BasicTree<ActionTree> {
 	// TODO Make a new sub-class for "radio style" selection. As a dropdown
 	// menu, the sub-menu items should have checkboxes, but only one is selected
 	// at a time.
-	/**
-	 * The default {@link #style}, {@link IAction#AS_PUSH_BUTTON}.
-	 */
-	public static final int defaultStyle = Action.AS_PUSH_BUTTON;
 
 	/**
 	 * The string displayed for the {@code ActionTree}'s contributions to
@@ -88,9 +84,9 @@ public class ActionTree extends BasicTree<ActionTree> {
 	/**
 	 * The style of the {@code ActionTree}'s contributions to widgets. This
 	 * should be set based on the styles set in the class {@link Action}, e.g.,
-	 * {@link IAction#AS_PUSH_BUTTON} or {@link IAction#AS_CHECK_BOX}.
-	 * 
-	 * @see #defaultStyle
+	 * {@link IAction#AS_PUSH_BUTTON} or {@link IAction#AS_CHECK_BOX}. We use an
+	 * {@code Integer} so we can use {@code null} to represent no preferred
+	 * style.
 	 */
 	public Integer style = null;
 	/**
@@ -342,7 +338,7 @@ public class ActionTree extends BasicTree<ActionTree> {
 		// text, toolTipText, style, image, and action.
 		hash = hash * 31 + (text == null ? 0 : text.hashCode());
 		hash = hash * 31 + (toolTipText == null ? 0 : toolTipText.hashCode());
-		hash = hash * 31 + style;
+		hash = hash * 31 + (style == null ? 0 : style.hashCode());
 		hash = hash * 31 + (image == null ? 0 : image.hashCode());
 		hash = hash * 31 + (action == null ? 0 : action.hashCode());
 		return hash;
