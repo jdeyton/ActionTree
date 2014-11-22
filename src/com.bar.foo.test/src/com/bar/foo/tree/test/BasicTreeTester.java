@@ -132,6 +132,8 @@ public class BasicTreeTester {
 		// --------------------------------------- //
 
 		// ---- Test with the more complicated tree. ---- //
+
+		// Create the test tree. It has several layers of nodes.
 		root = BasicTestTree.createTestTree();
 
 		// Test the iterator() method. It defaults to a breadth-first iterator.
