@@ -22,7 +22,7 @@ import com.bar.foo.tree.iterator.TreeIterationOrder;
  * @author Jordan
  *
  */
-public class TreeTester {
+public class BasicTreeTester {
 
 	/**
 	 * Checks that the child addition method works properly.
@@ -35,9 +35,9 @@ public class TreeTester {
 		// TODO Check that the same child can't be added twice.
 
 		// Add a child and check the connections between child and parent.
-		DummyTree parent = new DummyTree();
-		DummyTree newParent = new DummyTree();
-		DummyTree child = new DummyTree();
+		BasicTestTree parent = new BasicTestTree();
+		BasicTestTree newParent = new BasicTestTree();
+		BasicTestTree child = new BasicTestTree();
 
 		// Add the child to the first parent and check the connections.
 		parent.addChild(child);
@@ -64,8 +64,8 @@ public class TreeTester {
 		// TODO Check that the same child can't be removed twice.
 
 		// Add a child, remove it, then make sure all connections are severed.
-		DummyTree parent = new DummyTree();
-		DummyTree child = new DummyTree();
+		BasicTestTree parent = new BasicTestTree();
+		BasicTestTree child = new BasicTestTree();
 
 		// Check removeChild(int)
 		parent.addChild(child);
@@ -87,194 +87,84 @@ public class TreeTester {
 	 * @see BasicTree#iterator(com.bar.foo.tree.iterator.TreeIterationOrder)
 	 */
 	@Test
-	public void checkBreadthFirstIterator() {
+	public void checkIterators() {
 
-		DummyTree root;
-		Iterator<DummyTree> iterator;
-
-		// Set up the expected breadth-first-order output. This is based on the
-		// property values of the tree created by createTestTree().
-		final String expectedOutput = "A1 B1 B2 C1 C2 C3 C4 D1 D2 D3 D4 D5 ";
+		BasicTestTree root;
+		Iterator<BasicTestTree> iterator;
+		String actualOutput;
+		String expectedOutput;
 
 		// ---- Test with the base case tree. ---- //
 
 		// Create the test tree. In this case, it's just a single node.
-		root = new DummyTree();
+		root = new BasicTestTree();
 		root.property = "A1";
 
-		// Initialize the actual output.
-		String actualOutput = "";
+		// Set the expected output. Since there is just one node, we only need
+		// to set it here.
+		expectedOutput = "A1 ";
 
-		// Create a breadth-first-order iterator.
-		iterator = root.iterator(TreeIterationOrder.BreadthFirst);
-
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-
-		// Check the output. It should be the name of the single node.
-		assertEquals("A1 ", actualOutput);
-		// --------------------------------------- //
-
-		// ---- Test with the more complicated tree. ---- //
-
-		// Create the test tree. In this case, it's just a single node.
-		root = createTestTree();
-
-		// Create a breadth-first-order iterator.
-		iterator = root.iterator(TreeIterationOrder.BreadthFirst);
-
+		// Test the iterator() method. It defaults to a breadth-first iterator.
 		// Reset the actual output.
 		actualOutput = "";
-
-		// Iterate over the tree and append the names to the output string.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-
-		// Make sure the actual order of the trees matches the expected order.
-		assertEquals(expectedOutput, actualOutput);
-		// ---------------------------------------------- //
-
-		// ---- Test with the more complicated tree. ---- //
-		// In this case, we check the default iterator;
-
-		// Create the test tree. In this case, it's just a single node.
-		root = createTestTree();
-
-		// Create a breadth-first-order iterator.
+		// Create an iterator of the default order.
 		iterator = root.iterator();
-
-		// Reset the actual output.
-		actualOutput = "";
-
-		// Iterate over the tree and append the names to the output string.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-
-		// Make sure the actual order of the trees matches the expected order.
-		assertEquals(expectedOutput, actualOutput);
-		// ---------------------------------------------- //
-
-		return;
-	}
-
-	/**
-	 * Checks that the pre-order traversal of the tree works properly.
-	 * 
-	 * @see BasicTree#iterator(com.bar.foo.tree.iterator.TreeIterationOrder)
-	 */
-	@Test
-	public void checkPreOrderIterator() {
-
-		DummyTree root;
-		Iterator<DummyTree> iterator;
-
-		// Set up the expected pre-order output. This is based on the property
-		// values of the tree created by createTestTree().
-		final String expectedOutput = "A1 B1 C1 B2 C2 C3 D1 D2 C4 D3 D4 D5 ";
-
-		// ---- Test with the base case tree. ---- //
-
-		// Create the test tree. In this case, it's just a single node.
-		root = new DummyTree();
-		root.property = "A1";
-
-		// Initialize the actual output.
-		String actualOutput = "";
-
-		// Create a pre-order iterator.
-		iterator = root.iterator(TreeIterationOrder.PreOrder);
-
 		// Test the base case.
 		while (iterator.hasNext()) {
 			actualOutput += iterator.next().property + " ";
 		}
-
 		// Check the output. It should be the name of the single node.
-		assertEquals("A1 ", actualOutput);
+		assertEquals(expectedOutput, actualOutput);
+
+		// Test the iterator(TreeIterationOrder) method.
+		for (TreeIterationOrder order : TreeIterationOrder.values()) {
+			// Reset the actual output.
+			actualOutput = "";
+			// Create an iterator of the proper order.
+			iterator = root.iterator(order);
+			// Test the base case.
+			while (iterator.hasNext()) {
+				actualOutput += iterator.next().property + " ";
+			}
+			// Check the output. It should be the name of the single node.
+			assertEquals(expectedOutput, actualOutput);
+		}
 		// --------------------------------------- //
 
 		// ---- Test with the more complicated tree. ---- //
+		root = BasicTestTree.createTestTree();
 
-		// Create the test tree. In this case, it's just a single node.
-		root = createTestTree();
-
-		// Create a pre-order iterator.
-		iterator = root.iterator(TreeIterationOrder.PreOrder);
-
+		// Test the iterator() method. It defaults to a breadth-first iterator.
 		// Reset the actual output.
 		actualOutput = "";
-
-		// Iterate over the tree and append the names to the output string.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-
-		// Make sure the actual order of the trees matches the expected order.
-		assertEquals(expectedOutput, actualOutput);
-		// ---------------------------------------------- //
-
-		return;
-	}
-
-	/**
-	 * Checks that the post-order traversal of the tree works properly.
-	 * 
-	 * @see BasicTree#iterator(com.bar.foo.tree.iterator.TreeIterationOrder)
-	 */
-	@Test
-	public void checkPostOrderIterator() {
-
-		DummyTree root;
-		Iterator<DummyTree> iterator;
-
-		// Set up the expected post-order output. This is based on the property
-		// values of the tree created by createTestTree().
-		final String expectedOutput = "C1 B1 C2 D1 D2 C3 D3 D4 D5 C4 B2 A1 ";
-
-		// ---- Test with the base case tree. ---- //
-
-		// Create the test tree. In this case, it's just a single node.
-		root = new DummyTree();
-		root.property = "A1";
-
-		// Initialize the actual output.
-		String actualOutput = "";
-
-		// Create a post-order iterator.
-		iterator = root.iterator(TreeIterationOrder.PreOrder);
-
+		// Set the expected output for the default iterator.
+		expectedOutput = BasicTestTree
+				.getPropertyIterationOrder(TreeIterationOrder.BreadthFirst);
+		// Create an iterator of the default order.
+		iterator = root.iterator();
 		// Test the base case.
 		while (iterator.hasNext()) {
 			actualOutput += iterator.next().property + " ";
 		}
-
 		// Check the output. It should be the name of the single node.
-		assertEquals("A1 ", actualOutput);
-		// --------------------------------------- //
-
-		// ---- Test with the more complicated tree. ---- //
-
-		// Create the test tree. In this case, it's just a single node.
-		root = createTestTree();
-
-		// Create a post-order iterator.
-		iterator = root.iterator(TreeIterationOrder.PreOrder);
-
-		// Reset the actual output.
-		actualOutput = "";
-
-		// Iterate over the tree and append the names to the output string.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-
-		// Make sure the actual order of the trees matches the expected order.
 		assertEquals(expectedOutput, actualOutput);
-		// ---------------------------------------------- //
+
+		// Test the iterator(TreeIterationOrder) method.
+		for (TreeIterationOrder order : TreeIterationOrder.values()) {
+			// Reset the actual output.
+			actualOutput = "";
+			// Set the expected output for the iterator.
+			expectedOutput = BasicTestTree.getPropertyIterationOrder(order);
+			// Create an iterator of the proper order.
+			iterator = root.iterator(order);
+			// Test the base case.
+			while (iterator.hasNext()) {
+				actualOutput += iterator.next().property + " ";
+			}
+			// Check the output. It should be the name of the single node.
+			assertEquals("BasicTreeTester failure: " + order.toString()
+					+ " iteration failed.", expectedOutput, actualOutput);
+		}
 
 		return;
 	}
@@ -291,9 +181,9 @@ public class TreeTester {
 	@Test
 	public void checkEquality() {
 
-		DummyTree object = new DummyTree();
-		DummyTree equalObject = new DummyTree();
-		DummyTree unequalObject = null;
+		BasicTestTree object = new BasicTestTree();
+		BasicTestTree equalObject = new BasicTestTree();
+		BasicTestTree unequalObject = null;
 
 		// ---- Check bad arguments to equals. ---- //
 		// Check the default equals method.
@@ -331,7 +221,7 @@ public class TreeTester {
 		// ------------------------------------------------ //
 
 		// ---- Try changing the properties. ---- //
-		unequalObject = new DummyTree();
+		unequalObject = new BasicTestTree();
 		object.property = "derp";
 		equalObject.property = "derp";
 
@@ -393,47 +283,47 @@ public class TreeTester {
 		// -------------------------------------- //
 
 		// ---- Try a more complicated tree. ---- //
-		DummyTree tree1;
-		DummyTree tree2;
+		BasicTestTree tree1;
+		BasicTestTree tree2;
 
 		// Create a tree with 4 elements as follows:
 		// Breadth first order: ABCD, A has children B and C, C has child D.
-		object = new DummyTree();
+		object = new BasicTestTree();
 		object.property = "A";
-		tree1 = new DummyTree();
+		tree1 = new BasicTestTree();
 		tree1.property = "B";
 		object.addChild(tree1);
-		tree1 = new DummyTree();
+		tree1 = new BasicTestTree();
 		tree1.property = "C";
 		object.addChild(tree1);
-		tree2 = new DummyTree();
+		tree2 = new BasicTestTree();
 		tree2.property = "D";
 		tree1.addChild(tree2);
 
 		// Duplicate the tree for the equals tree.
-		equalObject = new DummyTree();
+		equalObject = new BasicTestTree();
 		equalObject.property = "A";
-		tree1 = new DummyTree();
+		tree1 = new BasicTestTree();
 		tree1.property = "B";
 		equalObject.addChild(tree1);
-		tree1 = new DummyTree();
+		tree1 = new BasicTestTree();
 		tree1.property = "C";
 		equalObject.addChild(tree1);
-		tree2 = new DummyTree();
+		tree2 = new BasicTestTree();
 		tree2.property = "D";
 		tree1.addChild(tree2);
 
 		// For an unequal tree, create a different tree with the same
 		// breadth-first order (just add all nodes to A).
-		unequalObject = new DummyTree();
+		unequalObject = new BasicTestTree();
 		unequalObject.property = "A";
-		tree1 = new DummyTree();
+		tree1 = new BasicTestTree();
 		tree1.property = "B";
 		unequalObject.addChild(tree1);
-		tree1 = new DummyTree();
+		tree1 = new BasicTestTree();
 		tree1.property = "C";
 		unequalObject.addChild(tree1);
-		tree2 = new DummyTree();
+		tree2 = new BasicTestTree();
 		tree2.property = "D";
 		unequalObject.addChild(tree2); // Different!
 
@@ -500,7 +390,7 @@ public class TreeTester {
 		// -------------------------------------- //
 
 		// ---- Try comparing against another type of BasicTree. ---- //
-		FakeDummyTree fakeObject = new FakeDummyTree();
+		FakeBasicTestTree fakeObject = new FakeBasicTestTree();
 		assertFalse(object.equals(fakeObject));
 		// ---------------------------------------------------------- //
 
@@ -532,13 +422,14 @@ public class TreeTester {
 	 *            in the parent's list of children. If the index is greater than
 	 *            the number of children, this method causes a fail.
 	 */
-	private void checkConnected(DummyTree parent, DummyTree child, int index) {
+	private void checkConnected(BasicTestTree parent, BasicTestTree child,
+			int index) {
 		// Make sure the child's parent is the same parent.
 		assertTrue(parent == child.getParent());
 
 		// Get the list of children and check its size vs the reported size from
 		// getNumberOfChildren().
-		List<DummyTree> children = parent.getChildren();
+		List<BasicTestTree> children = parent.getChildren();
 		assertEquals(children.size(), parent.getNumberOfChildren());
 
 		// Make sure the index is valid.
@@ -573,13 +464,13 @@ public class TreeTester {
 	 * @param child
 	 *            The child tree. Assumed not to be null.
 	 */
-	private void checkSevered(DummyTree parent, DummyTree child) {
+	private void checkSevered(BasicTestTree parent, BasicTestTree child) {
 		// Make sure the child's parent is not the same parent.
 		assertTrue(parent != child.getParent());
 
 		// Get the list of children and check its size vs the reported size from
 		// getNumberOfChildren().
-		List<DummyTree> children = parent.getChildren();
+		List<BasicTestTree> children = parent.getChildren();
 		assertEquals(children.size(), parent.getNumberOfChildren());
 
 		// Find the child in the List returned via getChildren().
@@ -599,144 +490,15 @@ public class TreeTester {
 	}
 
 	/**
-	 * Creates a tree for testing purposes. This is intended for use with the
-	 * iterator tests.
-	 * 
-	 * @return A tree with 4 layers and several children per layer.
-	 */
-	private DummyTree createTestTree() {
-		DummyTree root;
-
-		/*-
-		 * Here's how the tree breaks down:
-		 * 
-		 * A1
-		 * |-B1
-		 * | \-C1
-		 * \-B2
-		 *   |-C2
-		 *   |-C3
-		 *   | |-D1
-		 *   | \-D2
-		 *   \-C4
-		 *     |-D3
-		 *     |-D4
-		 *     \-D5
-		 */
-
-		// The root node is labeled A for top level and 1 for first "A".
-		root = new DummyTree();
-		root.property = "A1";
-
-		// There are 3 additional levels of the tree (B, C, and D).
-		DummyTree b, c, d;
-
-		// The first sub-tree is B1 with a child C1.
-		b = new DummyTree();
-		b.property = "B1";
-		root.addChild(b);
-		c = new DummyTree();
-		c.property = "C1";
-		b.addChild(c);
-
-		// The second sub-tree is B2. It has 3 C children and 5 D grandchildren.
-		b = new DummyTree();
-		b.property = "B2";
-		root.addChild(b);
-
-		// C2 is a child of B2 but has no children.
-		c = new DummyTree();
-		c.property = "C2";
-		b.addChild(c);
-
-		// C3 is a child of B2 and has children D1 and D2.
-		c = new DummyTree();
-		c.property = "C3";
-		b.addChild(c);
-		// C3's children...
-		d = new DummyTree();
-		d.property = "D1";
-		c.addChild(d);
-		d = new DummyTree();
-		d.property = "D2";
-		c.addChild(d);
-
-		// C4 is a child of B2 and has children D3, D4, and D5.
-		c = new DummyTree();
-		c.property = "C4";
-		b.addChild(c);
-		// C4's children...
-		d = new DummyTree();
-		d.property = "D3";
-		c.addChild(d);
-		d = new DummyTree();
-		d.property = "D4";
-		c.addChild(d);
-		d = new DummyTree();
-		d.property = "D5";
-		c.addChild(d);
-
-		return root;
-	}
-
-	/**
-	 * A fake {@link DummyTree} with no properties.
+	 * A fake {@link BasicTestTree} with no properties.
 	 * 
 	 * @author Jordan
 	 *
 	 */
-	private class FakeDummyTree extends BasicTree<FakeDummyTree> {
+	private class FakeBasicTestTree extends BasicTree<FakeBasicTestTree> {
 		@Override
-		public FakeDummyTree getValue() {
+		public FakeBasicTestTree getValue() {
 			return this;
-		}
-	}
-
-	/**
-	 * A simple extension of BasicTree (which is abstract) that adds one string
-	 * property to the mix.
-	 * 
-	 * @author Jordan
-	 *
-	 */
-	private class DummyTree extends BasicTree<DummyTree> {
-
-		/**
-		 * A simple string property.
-		 */
-		public String property = null;
-
-		/**
-		 * Required.
-		 */
-		@Override
-		public DummyTree getValue() {
-			return this;
-		}
-
-		/**
-		 * Overrides the node equals method to factor in the {@link #property}.
-		 */
-		@Override
-		public boolean equals(Object object) {
-			boolean equals = super.equals(object);
-			if (equals && this != object && object instanceof DummyTree) {
-				DummyTree tree = (DummyTree) object;
-				// Compare the string property.
-				equals &= (property == null ? tree.property == null : property
-						.equals(tree.property));
-			}
-			return equals;
-		}
-
-		/**
-		 * Overrides the node hash method to factor in the {@link #property}.
-		 */
-		@Override
-		public int hashCode() {
-			int hash = super.hashCode();
-			hash = hash * 31 + (property == null ? 0 : property.hashCode());
-			return hash;
 		}
 	}
 }
