@@ -1,7 +1,9 @@
 package com.bar.foo.tree.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bar.foo.tree.BasicTree;
-import com.bar.foo.tree.iterator.TreeIterationOrder;
 
 /**
  * A simple extension of BasicTree (which cannot be instantiated directly due to
@@ -17,6 +19,19 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 	 * A simple string property.
 	 */
 	public String property = null;
+
+	/**
+	 * The list to return in {@link #getPostOrderNodes()}.
+	 */
+	private List<BasicTestTree> postOrder;
+	/**
+	 * The list to return in {@link #getPreOrderNodes()}.
+	 */
+	private List<BasicTestTree> preOrder;
+	/**
+	 * The list to return in {@link #getBreadthFirstNodes()}.
+	 */
+	private List<BasicTestTree> breadthFirst;
 
 	/**
 	 * Required.
@@ -58,7 +73,11 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 	 * @return A tree with 4 layers and several children per layer.
 	 */
 	public static BasicTestTree createTestTree() {
-		BasicTestTree root;
+
+		BasicTestTree a1;
+		BasicTestTree b1, b2;
+		BasicTestTree c1, c2, c3, c4;
+		BasicTestTree d1, d2, d3, d4, d5;
 
 		/*-
 		 * Here's how the tree breaks down:
@@ -78,84 +97,101 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 		 */
 
 		// The root node is labeled A for top level and 1 for first "A".
-		root = new BasicTestTree();
-		root.property = "A1";
-
-		// There are 3 additional levels of the tree (B, C, and D).
-		BasicTestTree b, c, d;
+		a1 = new BasicTestTree();
+		a1.property = "A1";
 
 		// The first sub-tree is B1 with a child C1.
-		b = new BasicTestTree();
-		b.property = "B1";
-		root.addChild(b);
-		c = new BasicTestTree();
-		c.property = "C1";
-		b.addChild(c);
+		b1 = new BasicTestTree();
+		b1.property = "B1";
+		a1.addChild(b1);
+		c1 = new BasicTestTree();
+		c1.property = "C1";
+		b1.addChild(c1);
 
 		// The second sub-tree is B2. It has 3 C children and 5 D grandchildren.
-		b = new BasicTestTree();
-		b.property = "B2";
-		root.addChild(b);
+		b2 = new BasicTestTree();
+		b2.property = "B2";
+		a1.addChild(b2);
 
 		// C2 is a child of B2 but has no children.
-		c = new BasicTestTree();
-		c.property = "C2";
-		b.addChild(c);
+		c2 = new BasicTestTree();
+		c2.property = "C2";
+		b2.addChild(c2);
 
 		// C3 is a child of B2 and has children D1 and D2.
-		c = new BasicTestTree();
-		c.property = "C3";
-		b.addChild(c);
+		c3 = new BasicTestTree();
+		c3.property = "C3";
+		b2.addChild(c3);
 		// C3's children...
-		d = new BasicTestTree();
-		d.property = "D1";
-		c.addChild(d);
-		d = new BasicTestTree();
-		d.property = "D2";
-		c.addChild(d);
+		d1 = new BasicTestTree();
+		d1.property = "D1";
+		c3.addChild(d1);
+		d2 = new BasicTestTree();
+		d2.property = "D2";
+		c3.addChild(d2);
 
 		// C4 is a child of B2 and has children D3, D4, and D5.
-		c = new BasicTestTree();
-		c.property = "C4";
-		b.addChild(c);
+		c4 = new BasicTestTree();
+		c4.property = "C4";
+		b2.addChild(c4);
 		// C4's children...
-		d = new BasicTestTree();
-		d.property = "D3";
-		c.addChild(d);
-		d = new BasicTestTree();
-		d.property = "D4";
-		c.addChild(d);
-		d = new BasicTestTree();
-		d.property = "D5";
-		c.addChild(d);
+		d3 = new BasicTestTree();
+		d3.property = "D3";
+		c4.addChild(d3);
+		d4 = new BasicTestTree();
+		d4.property = "D4";
+		c4.addChild(d4);
+		d5 = new BasicTestTree();
+		d5.property = "D5";
+		c4.addChild(d5);
 
-		return root;
+		// pre-order: A1 B1 C1 B2 C2 C3 D1 D2 C4 D3 D4 D5
+		a1.preOrder = createList(a1, b1, c1, b2, c2, c3, d1, d2, c4, d3, d4, d5);
+
+		// post-order: C1 B1 C2 D1 D2 C3 D3 D4 D5 C4 B2 A1
+		a1.postOrder = createList(c1, b1, c2, d1, d2, c3, d3, d4, d5, c4, b2,
+				a1);
+
+		// breadth-first: A1 B1 B2 C1 C2 C3 C4 D1 D2 D3 D4 D5
+		a1.breadthFirst = createList(a1, b1, b2, c1, c2, c3, c4, d1, d2, d3,
+				d4, d5);
+
+		return a1;
 	}
 
 	/**
-	 * Gets a string containing the {@link #property} values of the tree based
-	 * on the provided iteration order. These values are hard-coded based on the
-	 * structure of the tree created by {@link #createTestTree()}.
-	 * 
-	 * @param order
-	 *            The order of iteration.
-	 * @return The order of property strings from the tree. Each property string
-	 *         will be separated by a space, and there will be a space at the
-	 *         end.
+	 * Creates a list from the nodes specified in the arguments. No error
+	 * handling is performed.
 	 */
-	public static String getPropertyIterationOrder(TreeIterationOrder order) {
-		String properties = null;
-		switch (order) {
-		case BreadthFirst:
-			properties = "A1 B1 B2 C1 C2 C3 C4 D1 D2 D3 D4 D5 ";
-			break;
-		case PreOrder:
-			properties = "A1 B1 C1 B2 C2 C3 D1 D2 C4 D3 D4 D5 ";
-			break;
-		case PostOrder:
-			properties = "C1 B1 C2 D1 D2 C3 D3 D4 D5 C4 B2 A1 ";
-			break;
+	private static List<BasicTestTree> createList(BasicTestTree... nodes) {
+		List<BasicTestTree> list = new ArrayList<BasicTestTree>(nodes.length);
+		for (BasicTestTree node : nodes) {
+			list.add(node);
 		}
-		return properties;
+		return list;
+	}
+
+	/**
+	 * Gets a list of the nodes in the tree in the post order iteration order.
+	 * This <i>must</i> be the root node.
+	 */
+	public List<BasicTestTree> getPostOrderNodes() {
+		return new ArrayList<BasicTestTree>(postOrder);
+	}
+
+	/**
+	 * Gets a list of the nodes in the tree in the pre order iteration order.
+	 * This <i>must</i> be the root node.
+	 */
+	public List<BasicTestTree> getPreOrderNodes() {
+		return new ArrayList<BasicTestTree>(preOrder);
+	}
+
+	/**
+	 * Gets a list of the nodes in the tree in the breadth first iteration
+	 * order. This <i>must</i> be the root node.
+	 */
+	public List<BasicTestTree> getBreadthFirstNodes() {
+		return new ArrayList<BasicTestTree>(breadthFirst);
 	}
 }

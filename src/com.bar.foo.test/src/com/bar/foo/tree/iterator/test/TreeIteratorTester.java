@@ -1,6 +1,5 @@
 package com.bar.foo.tree.iterator.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -42,52 +41,44 @@ public class TreeIteratorTester {
 			public Iterator<BasicTestTree> createIterator(BasicTestTree root) {
 				return new BreadthFirstTreeIterator<BasicTestTree>(root);
 			}
+
+			@Override
+			public Iterator<BasicTestTree> createExpectedIterator(
+					BasicTestTree root) {
+				return root.getBreadthFirstNodes().iterator();
+			}
 		};
 
 		BasicTestTree root;
-		String actualOutput;
-		String expectedOutput;
 		Iterator<BasicTestTree> iterator;
+		Iterator<BasicTestTree> expectedIterator;
 
 		// ---- Check the base case order. ---- //
-
 		// Create the test tree. In this case, it's just a single node.
 		root = new BasicTestTree();
-		root.property = "Some property";
 
-		// Set the expected output.
-		expectedOutput = "Some property ";
-
-		// Reset the actual output.
-		actualOutput = "";
-		// Create an iterator of proper order.
+		// There should be only one node: the root.
 		iterator = iteratorCreator.createIterator(root);
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-		// Check the output. It should be the name of the single node.
-		assertEquals(expectedOutput, actualOutput);
+		assertTrue(iterator.hasNext());
+		assertSame(root, iterator.next());
 		// ------------------------------------ //
 
 		// ---- Check a more complicated tree's order. ---- //
-
 		// Create the test tree. It has several layers of nodes.
 		root = BasicTestTree.createTestTree();
 
-		// Set the expected output.
-		expectedOutput = BasicTestTree.getPropertyIterationOrder(order);
+		// Get an iterator for the known iteration order list.
+		expectedIterator = iteratorCreator.createExpectedIterator(root);
 
-		// Reset the actual output.
-		actualOutput = "";
-		// Create an iterator of proper order.
+		// Get an iterator from the tree. This iterator will be compared against
+		// the known good iterator above.
 		iterator = iteratorCreator.createIterator(root);
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
+
+		// Compare the tested iteration order against the expected order.
+		while (expectedIterator.hasNext()) {
+			assertTrue(iterator.hasNext());
+			assertSame(expectedIterator.next(), iterator.next());
 		}
-		// Check the output. It should be the name of the single node.
-		assertEquals(expectedOutput, actualOutput);
 		// ------------------------------------------------ //
 
 		// ---- Check exception when initialized with a null tree. ---- //
@@ -158,52 +149,44 @@ public class TreeIteratorTester {
 			public Iterator<BasicTestTree> createIterator(BasicTestTree root) {
 				return new PreOrderTreeIterator<BasicTestTree>(root);
 			}
+
+			@Override
+			public Iterator<BasicTestTree> createExpectedIterator(
+					BasicTestTree root) {
+				return root.getPreOrderNodes().iterator();
+			}
 		};
 
 		BasicTestTree root;
-		String actualOutput;
-		String expectedOutput;
 		Iterator<BasicTestTree> iterator;
+		Iterator<BasicTestTree> expectedIterator;
 
 		// ---- Check the base case order. ---- //
-
 		// Create the test tree. In this case, it's just a single node.
 		root = new BasicTestTree();
-		root.property = "Some property";
 
-		// Set the expected output.
-		expectedOutput = "Some property ";
-
-		// Reset the actual output.
-		actualOutput = "";
-		// Create an iterator of proper order.
+		// There should be only one node: the root.
 		iterator = iteratorCreator.createIterator(root);
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-		// Check the output. It should be the name of the single node.
-		assertEquals(expectedOutput, actualOutput);
+		assertTrue(iterator.hasNext());
+		assertSame(root, iterator.next());
 		// ------------------------------------ //
 
 		// ---- Check a more complicated tree's order. ---- //
-
 		// Create the test tree. It has several layers of nodes.
 		root = BasicTestTree.createTestTree();
 
-		// Set the expected output.
-		expectedOutput = BasicTestTree.getPropertyIterationOrder(order);
+		// Get an iterator for the known iteration order list.
+		expectedIterator = iteratorCreator.createExpectedIterator(root);
 
-		// Reset the actual output.
-		actualOutput = "";
-		// Create an iterator of proper order.
+		// Get an iterator from the tree. This iterator will be compared against
+		// the known good iterator above.
 		iterator = iteratorCreator.createIterator(root);
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
+
+		// Compare the tested iteration order against the expected order.
+		while (expectedIterator.hasNext()) {
+			assertTrue(iterator.hasNext());
+			assertSame(expectedIterator.next(), iterator.next());
 		}
-		// Check the output. It should be the name of the single node.
-		assertEquals(expectedOutput, actualOutput);
 		// ------------------------------------------------ //
 
 		// ---- Check exception when initialized with a null tree. ---- //
@@ -274,52 +257,44 @@ public class TreeIteratorTester {
 			public Iterator<BasicTestTree> createIterator(BasicTestTree root) {
 				return new PostOrderTreeIterator<BasicTestTree>(root);
 			}
+
+			@Override
+			public Iterator<BasicTestTree> createExpectedIterator(
+					BasicTestTree root) {
+				return root.getPostOrderNodes().iterator();
+			}
 		};
 
 		BasicTestTree root;
-		String actualOutput;
-		String expectedOutput;
 		Iterator<BasicTestTree> iterator;
+		Iterator<BasicTestTree> expectedIterator;
 
 		// ---- Check the base case order. ---- //
-
 		// Create the test tree. In this case, it's just a single node.
 		root = new BasicTestTree();
-		root.property = "Some property";
 
-		// Set the expected output.
-		expectedOutput = "Some property ";
-
-		// Reset the actual output.
-		actualOutput = "";
-		// Create an iterator of proper order.
+		// There should be only one node: the root.
 		iterator = iteratorCreator.createIterator(root);
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-		// Check the output. It should be the name of the single node.
-		assertEquals(expectedOutput, actualOutput);
+		assertTrue(iterator.hasNext());
+		assertSame(root, iterator.next());
 		// ------------------------------------ //
 
 		// ---- Check a more complicated tree's order. ---- //
-
 		// Create the test tree. It has several layers of nodes.
 		root = BasicTestTree.createTestTree();
 
-		// Set the expected output.
-		expectedOutput = BasicTestTree.getPropertyIterationOrder(order);
+		// Get an iterator for the known iteration order list.
+		expectedIterator = iteratorCreator.createExpectedIterator(root);
 
-		// Reset the actual output.
-		actualOutput = "";
-		// Create an iterator of proper order.
+		// Get an iterator from the tree. This iterator will be compared against
+		// the known good iterator above.
 		iterator = iteratorCreator.createIterator(root);
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
+
+		// Compare the tested iteration order against the expected order.
+		while (expectedIterator.hasNext()) {
+			assertTrue(iterator.hasNext());
+			assertSame(expectedIterator.next(), iterator.next());
 		}
-		// Check the output. It should be the name of the single node.
-		assertEquals(expectedOutput, actualOutput);
 		// ------------------------------------------------ //
 
 		// ---- Check exception when initialized with a null tree. ---- //
@@ -384,5 +359,7 @@ public class TreeIteratorTester {
 	 */
 	private interface IteratorCreator {
 		public Iterator<BasicTestTree> createIterator(BasicTestTree root);
+
+		public Iterator<BasicTestTree> createExpectedIterator(BasicTestTree root);
 	}
 }
