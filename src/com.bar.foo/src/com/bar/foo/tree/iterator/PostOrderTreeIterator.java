@@ -17,7 +17,7 @@ public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 	 * only at the beginning of the traversal.
 	 */
 	private T lastNodeVisited = null;
-	
+
 	/**
 	 * The default constructor. Requires a root node. The root node and all
 	 * descendants will be traversed in a post-order traversal (a node's
@@ -62,39 +62,40 @@ public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 		// Take a peek at the top node in the stack.
 		T node = stack.peek();
 
-		// If the last node visited was the right-most child of the top node, we
-		// have finished traversing the top node. It is the next node that
-		// should be visited.
-		if (lastNodeVisited == node
-				.getChild(node.getNumberOfChildren() - 1)) {
-			next = stack.pop();
-			lastNodeVisited = next;
-		}
-		// Otherwise, we are still traversing this node.
-		else {
-			// If the last node visited was not null, get the sibling to its
-			// right.
-			if (lastNodeVisited != null) {
-				// TODO Figure out how to get around this...
-//				node = lastNodeVisited.getNextSibling();
-			}
-			// Otherwise, we have just started traversing the tree. The current
-			// node is the root node. Remove it from the stack because it might
-			// be added below.
-			else {
-				node = stack.pop();
-			}
-
-			// Traverse all left-descendants of the node down to a leaf child.
-			while (node.getNumberOfChildren() > 0) {
-				stack.push(node);
+		// If this is the first node visited or the last node visited was not
+		// the right-most child, then we need to find the next sibling and add
+		// all of its left-descendants to the stack.
+		if (node.hasChildren()
+				&& lastNodeVisited != node
+						.getChild(node.getNumberOfChildren() - 1)) {
+			// Note that we must handle the case where no node has yet been
+			// visited.
+			if (lastNodeVisited == null) {
 				node = node.getChild(0);
 			}
+			// Otherwise, we need to find the next sibling of the last node
+			// visited.
+			else {
+				for (int i = 0; i < node.getNumberOfChildren(); i++) {
+					T child = node.getChild(i);
+					if (child == lastNodeVisited) {
+						node = node.getChild(i + 1);
+						break;
+					}
+				}
+			}
 
-			// The next node to visit is the leaf child.
-			next = node;
-			lastNodeVisited = next;
+			// Add all left-descendants.
+			stack.push(node);
+			while (node.getNumberOfChildren() > 0) {
+				node = node.getChild(0);
+				stack.push(node);
+			}
 		}
+
+		// Pop the top node on the stack, as it is the next node to traverse.
+		next = stack.pop();
+		lastNodeVisited = next;
 
 		return next;
 	}

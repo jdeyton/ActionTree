@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Iterator;
 import java.util.List;
@@ -91,81 +92,95 @@ public class BasicTreeTester {
 
 		BasicTestTree root;
 		Iterator<BasicTestTree> iterator;
-		String actualOutput;
-		String expectedOutput;
+		Iterator<BasicTestTree> expectedIterator;
 
-		// ---- Test with the base case tree. ---- //
-
+		// ---- Check the base case order. ---- //
 		// Create the test tree. In this case, it's just a single node.
 		root = new BasicTestTree();
-		root.property = "A1";
 
-		// Set the expected output. Since there is just one node, we only need
-		// to set it here.
-		expectedOutput = "A1 ";
-
-		// Test the iterator() method. It defaults to a breadth-first iterator.
-		// Reset the actual output.
-		actualOutput = "";
-		// Create an iterator of the default order.
+		// There should be only one node: the root.
 		iterator = root.iterator();
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
-		}
-		// Check the output. It should be the name of the single node.
-		assertEquals(expectedOutput, actualOutput);
+		assertTrue(iterator.hasNext());
+		assertSame(root, iterator.next());
+		assertFalse(iterator.hasNext());
 
-		// Test the iterator(TreeIterationOrder) method.
+		// The same should be true for any iteration order.
 		for (TreeIterationOrder order : TreeIterationOrder.values()) {
-			// Reset the actual output.
-			actualOutput = "";
-			// Create an iterator of the proper order.
 			iterator = root.iterator(order);
-			// Test the base case.
-			while (iterator.hasNext()) {
-				actualOutput += iterator.next().property + " ";
-			}
-			// Check the output. It should be the name of the single node.
-			assertEquals(expectedOutput, actualOutput);
+			assertTrue(iterator.hasNext());
+			assertSame(root, iterator.next());
+			assertFalse(iterator.hasNext());
 		}
-		// --------------------------------------- //
+		// ------------------------------------ //
 
-		// ---- Test with the more complicated tree. ---- //
-
+		// ---- Check a more complicated tree's order. ---- //
 		// Create the test tree. It has several layers of nodes.
 		root = BasicTestTree.createTestTree();
 
-		// Test the iterator() method. It defaults to a breadth-first iterator.
-		// Reset the actual output.
-		actualOutput = "";
-		// Set the expected output for the default iterator.
-		expectedOutput = BasicTestTree
-				.getPropertyIterationOrder(TreeIterationOrder.BreadthFirst);
-		// Create an iterator of the default order.
+		// Get the expected iterator (default - breadth-first).
+		expectedIterator = root.getBreadthFirstNodes().iterator();
+		// Compare it with the default iterator from the tree implementation.
 		iterator = root.iterator();
-		// Test the base case.
-		while (iterator.hasNext()) {
-			actualOutput += iterator.next().property + " ";
+		while (expectedIterator.hasNext()) {
+			assertTrue(iterator.hasNext());
+			assertSame(expectedIterator.next(), iterator.next());
 		}
-		// Check the output. It should be the name of the single node.
-		assertEquals(expectedOutput, actualOutput);
+		assertFalse(iterator.hasNext());
 
-		// Test the iterator(TreeIterationOrder) method.
+		// Now we need to check that all of the other iteration orders are good.
+
+		// Check breadth first iteration.
+		expectedIterator = root.getBreadthFirstNodes().iterator();
+		iterator = root.iterator(TreeIterationOrder.BreadthFirst);
+		// Compare them.
+		while (expectedIterator.hasNext()) {
+			assertTrue(iterator.hasNext());
+			assertSame(expectedIterator.next(), iterator.next());
+		}
+		assertFalse(iterator.hasNext());
+
+		// Check pre-order iteration.
+		expectedIterator = root.getPreOrderNodes().iterator();
+		iterator = root.iterator(TreeIterationOrder.PreOrder);
+		// Compare them.
+		while (expectedIterator.hasNext()) {
+			assertTrue(iterator.hasNext());
+			assertSame(expectedIterator.next(), iterator.next());
+		}
+		assertFalse(iterator.hasNext());
+
+		// Check post-order iteration.
+		expectedIterator = root.getPostOrderNodes().iterator();
+		iterator = root.iterator(TreeIterationOrder.PostOrder);
+		// Compare them.
+		while (expectedIterator.hasNext()) {
+			assertTrue(iterator.hasNext());
+			assertSame(expectedIterator.next(), iterator.next());
+		}
+		assertFalse(iterator.hasNext());
+		// ------------------------------------------------ //
+
+		// Removing via iterator shouldn't work.
+		iterator = root.iterator();
+		try {
+			iterator.remove();
+			fail("BasicTreeTester error: "
+					+ "The iterator removal operation should not be supported yet.");
+		} catch (UnsupportedOperationException e) {
+			// Exception was thrown as expected.
+		}
+
+		// Check for each iteration order type.
 		for (TreeIterationOrder order : TreeIterationOrder.values()) {
-			// Reset the actual output.
-			actualOutput = "";
-			// Set the expected output for the iterator.
-			expectedOutput = BasicTestTree.getPropertyIterationOrder(order);
-			// Create an iterator of the proper order.
 			iterator = root.iterator(order);
-			// Test the base case.
-			while (iterator.hasNext()) {
-				actualOutput += iterator.next().property + " ";
+			try {
+				iterator.remove();
+				fail("BasicTreeTester error: "
+						+ "The iterator removal operation should not be supported yet for the order \""
+						+ order + "\".");
+			} catch (UnsupportedOperationException e) {
+				// Exception was thrown as expected.
 			}
-			// Check the output. It should be the name of the single node.
-			assertEquals("BasicTreeTester failure: " + order.toString()
-					+ " iteration failed.", expectedOutput, actualOutput);
 		}
 
 		return;

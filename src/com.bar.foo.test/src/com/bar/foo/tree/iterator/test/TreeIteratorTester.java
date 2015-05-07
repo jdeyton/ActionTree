@@ -61,6 +61,7 @@ public class TreeIteratorTester {
 		iterator = iteratorCreator.createIterator(root);
 		assertTrue(iterator.hasNext());
 		assertSame(root, iterator.next());
+		assertFalse(iterator.hasNext());
 		// ------------------------------------ //
 
 		// ---- Check a more complicated tree's order. ---- //
@@ -79,6 +80,7 @@ public class TreeIteratorTester {
 			assertTrue(iterator.hasNext());
 			assertSame(expectedIterator.next(), iterator.next());
 		}
+		assertFalse(iterator.hasNext());
 		// ------------------------------------------------ //
 
 		// ---- Check exception when initialized with a null tree. ---- //
@@ -169,6 +171,7 @@ public class TreeIteratorTester {
 		iterator = iteratorCreator.createIterator(root);
 		assertTrue(iterator.hasNext());
 		assertSame(root, iterator.next());
+		assertFalse(iterator.hasNext());
 		// ------------------------------------ //
 
 		// ---- Check a more complicated tree's order. ---- //
@@ -187,6 +190,7 @@ public class TreeIteratorTester {
 			assertTrue(iterator.hasNext());
 			assertSame(expectedIterator.next(), iterator.next());
 		}
+		assertFalse(iterator.hasNext());
 		// ------------------------------------------------ //
 
 		// ---- Check exception when initialized with a null tree. ---- //
@@ -277,6 +281,7 @@ public class TreeIteratorTester {
 		iterator = iteratorCreator.createIterator(root);
 		assertTrue(iterator.hasNext());
 		assertSame(root, iterator.next());
+		assertFalse(iterator.hasNext());
 		// ------------------------------------ //
 
 		// ---- Check a more complicated tree's order. ---- //
@@ -295,6 +300,7 @@ public class TreeIteratorTester {
 			assertTrue(iterator.hasNext());
 			assertSame(expectedIterator.next(), iterator.next());
 		}
+		assertFalse(iterator.hasNext());
 		// ------------------------------------------------ //
 
 		// ---- Check exception when initialized with a null tree. ---- //
