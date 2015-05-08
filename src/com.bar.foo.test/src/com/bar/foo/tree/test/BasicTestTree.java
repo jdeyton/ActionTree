@@ -1,9 +1,12 @@
 package com.bar.foo.tree.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.bar.foo.tree.BasicTree;
+import com.bar.foo.tree.iterator.TreeIterationOrder;
 
 /**
  * A simple extension of BasicTree (which cannot be instantiated directly due to
@@ -21,17 +24,10 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 	public String property = null;
 
 	/**
-	 * The list to return in {@link #getPostOrderNodes()}.
+	 * The map of expected tree iteration orders. This is only initialized for
+	 * the root node of the test tree.
 	 */
-	private List<BasicTestTree> postOrder;
-	/**
-	 * The list to return in {@link #getPreOrderNodes()}.
-	 */
-	private List<BasicTestTree> preOrder;
-	/**
-	 * The list to return in {@link #getBreadthFirstNodes()}.
-	 */
-	private List<BasicTestTree> breadthFirst;
+	private Map<TreeIterationOrder, List<BasicTestTree>> expectedOrders;
 
 	/**
 	 * Required.
@@ -145,16 +141,20 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 		d5.property = "D5";
 		c4.addChild(d5);
 
+		// Set up the map of expected tree iteration orders.
+		a1.expectedOrders = new HashMap<TreeIterationOrder, List<BasicTestTree>>();
+
 		// pre-order: A1 B1 C1 B2 C2 C3 D1 D2 C4 D3 D4 D5
-		a1.preOrder = createList(a1, b1, c1, b2, c2, c3, d1, d2, c4, d3, d4, d5);
+		a1.expectedOrders.put(TreeIterationOrder.PreOrder,
+				createList(a1, b1, c1, b2, c2, c3, d1, d2, c4, d3, d4, d5));
 
 		// post-order: C1 B1 C2 D1 D2 C3 D3 D4 D5 C4 B2 A1
-		a1.postOrder = createList(c1, b1, c2, d1, d2, c3, d3, d4, d5, c4, b2,
-				a1);
+		a1.expectedOrders.put(TreeIterationOrder.PostOrder,
+				createList(c1, b1, c2, d1, d2, c3, d3, d4, d5, c4, b2, a1));
 
 		// breadth-first: A1 B1 B2 C1 C2 C3 C4 D1 D2 D3 D4 D5
-		a1.breadthFirst = createList(a1, b1, b2, c1, c2, c3, c4, d1, d2, d3,
-				d4, d5);
+		a1.expectedOrders.put(TreeIterationOrder.BreadthFirst,
+				createList(a1, b1, b2, c1, c2, c3, c4, d1, d2, d3, d4, d5));
 
 		return a1;
 	}
@@ -172,26 +172,14 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 	}
 
 	/**
-	 * Gets a list of the nodes in the tree in the post order iteration order.
-	 * This <i>must</i> be the root node.
+	 * Gets the expected ordering of nodes based on the desired tree iteration
+	 * order.
+	 * 
+	 * @param order
+	 *            The desired order of nodes.
+	 * @return The expected order of nodes.
 	 */
-	public List<BasicTestTree> getPostOrderNodes() {
-		return new ArrayList<BasicTestTree>(postOrder);
-	}
-
-	/**
-	 * Gets a list of the nodes in the tree in the pre order iteration order.
-	 * This <i>must</i> be the root node.
-	 */
-	public List<BasicTestTree> getPreOrderNodes() {
-		return new ArrayList<BasicTestTree>(preOrder);
-	}
-
-	/**
-	 * Gets a list of the nodes in the tree in the breadth first iteration
-	 * order. This <i>must</i> be the root node.
-	 */
-	public List<BasicTestTree> getBreadthFirstNodes() {
-		return new ArrayList<BasicTestTree>(breadthFirst);
+	public List<BasicTestTree> getExpectedOrder(TreeIterationOrder order) {
+		return (expectedOrders != null ? expectedOrders.get(order) : null);
 	}
 }

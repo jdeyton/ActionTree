@@ -118,7 +118,8 @@ public class BasicTreeTester {
 		root = BasicTestTree.createTestTree();
 
 		// Get the expected iterator (default - breadth-first).
-		expectedIterator = root.getBreadthFirstNodes().iterator();
+		expectedIterator = root.getExpectedOrder(
+				TreeIterationOrder.BreadthFirst).iterator();
 		// Compare it with the default iterator from the tree implementation.
 		iterator = root.iterator();
 		while (expectedIterator.hasNext()) {
@@ -128,36 +129,17 @@ public class BasicTreeTester {
 		assertFalse(iterator.hasNext());
 
 		// Now we need to check that all of the other iteration orders are good.
-
-		// Check breadth first iteration.
-		expectedIterator = root.getBreadthFirstNodes().iterator();
-		iterator = root.iterator(TreeIterationOrder.BreadthFirst);
-		// Compare them.
-		while (expectedIterator.hasNext()) {
-			assertTrue(iterator.hasNext());
-			assertSame(expectedIterator.next(), iterator.next());
+		for (TreeIterationOrder order : TreeIterationOrder.values()) {
+			// Get the expected and actual iterators.
+			expectedIterator = root.getExpectedOrder(order).iterator();
+			iterator = root.iterator(order);
+			// Compare them.
+			while (expectedIterator.hasNext()) {
+				assertTrue(iterator.hasNext());
+				assertSame(expectedIterator.next(), iterator.next());
+			}
+			assertFalse(iterator.hasNext());
 		}
-		assertFalse(iterator.hasNext());
-
-		// Check pre-order iteration.
-		expectedIterator = root.getPreOrderNodes().iterator();
-		iterator = root.iterator(TreeIterationOrder.PreOrder);
-		// Compare them.
-		while (expectedIterator.hasNext()) {
-			assertTrue(iterator.hasNext());
-			assertSame(expectedIterator.next(), iterator.next());
-		}
-		assertFalse(iterator.hasNext());
-
-		// Check post-order iteration.
-		expectedIterator = root.getPostOrderNodes().iterator();
-		iterator = root.iterator(TreeIterationOrder.PostOrder);
-		// Compare them.
-		while (expectedIterator.hasNext()) {
-			assertTrue(iterator.hasNext());
-			assertSame(expectedIterator.next(), iterator.next());
-		}
-		assertFalse(iterator.hasNext());
 		// ------------------------------------------------ //
 
 		// Removing via iterator shouldn't work.
