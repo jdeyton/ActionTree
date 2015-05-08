@@ -31,14 +31,6 @@ public abstract class TreeIterator<T extends ITree<T>> implements Iterator<T> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.util.Iterator#hasNext()
-	 */
-	@Override
-	public abstract boolean hasNext();
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.util.Iterator#next()
 	 */
 	@Override
