@@ -4,6 +4,33 @@ import java.util.Stack;
 
 import com.bar.foo.tree.ITree;
 
+/**
+ * This class provides a pre-order tree iterator implementation. In other words,
+ * it operates on a node before traversing its sub-tree.
+ * <p>
+ * For instance, for a tree with the following nodes (assume insertion order
+ * goes from top to bottom):
+ * </p>
+ * 
+ * <pre>
+ *   A
+ *   |--B
+ *   |  |--D
+ *   |  \--E
+ *   |
+ *   \--C
+ *      |--F
+ *      \--G
+ * </pre>
+ * <p>
+ * The iteration order will be {@literal A-B-D-E-C-F-G}.
+ * </p>
+ * 
+ * @author Jordan
+ *
+ * @param <T>
+ *            The type of tree node.
+ */
 public class PreOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 
 	/**
@@ -32,9 +59,7 @@ public class PreOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.TreeIterator#hasNext()
+	 * Overrides a method from TreeIterator.
 	 */
 	@Override
 	public boolean hasNext() {
@@ -42,9 +67,7 @@ public class PreOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.TreeIterator#next()
+	 * Overrides a method from TreeIterator.
 	 */
 	@Override
 	public T next() {

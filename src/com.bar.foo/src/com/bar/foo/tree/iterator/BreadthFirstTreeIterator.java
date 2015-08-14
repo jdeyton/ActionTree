@@ -5,8 +5,36 @@ import java.util.Queue;
 
 import com.bar.foo.tree.ITree;
 
-public class BreadthFirstTreeIterator<T extends ITree<T>> extends
-		TreeIterator<T> {
+/**
+ * This class provides a breadth-first tree iterator implementation. In other
+ * words, it traverses each level of the tree in the insertion order at each
+ * node.
+ * <p>
+ * For instance, for a tree with the following nodes (assume insertion order
+ * goes from top to bottom):
+ * </p>
+ * 
+ * <pre>
+ *   A
+ *   |--B
+ *   |  |--D
+ *   |  \--E
+ *   |
+ *   \--C
+ *      |--F
+ *      \--G
+ * </pre>
+ * <p>
+ * The iteration order will be {@literal A-B-C-D-E-F-G}.
+ * </p>
+ * 
+ * @author Jordan
+ *
+ * @param <T>
+ *            The type of tree node.
+ */
+public class BreadthFirstTreeIterator<T extends ITree<T>>
+		extends TreeIterator<T> {
 
 	/**
 	 * A queue used to maintain state information about the position of the
@@ -34,9 +62,7 @@ public class BreadthFirstTreeIterator<T extends ITree<T>> extends
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.TreeIterator#hasNext()
+	 * Overrides a method from TreeIterator.
 	 */
 	@Override
 	public boolean hasNext() {
@@ -44,9 +70,7 @@ public class BreadthFirstTreeIterator<T extends ITree<T>> extends
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.TreeIterator#next()
+	 * Overrides a method from TreeIterator.
 	 */
 	@Override
 	public T next() {

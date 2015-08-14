@@ -275,12 +275,12 @@ public class ActionTreeContribution {
 
 			// We cannot have a null style! Default to a button style.
 			if (style == null) {
-				style = Action.AS_PUSH_BUTTON;
+				style = IAction.AS_PUSH_BUTTON;
 			}
 
 			if (actionTree.hasChildren()) {
 				// The style is overridden so we can get a dropdown/sub-menu.
-				style = Action.AS_DROP_DOWN_MENU;
+				style = IAction.AS_DROP_DOWN_MENU;
 				if (action == null) {
 					// Create a dropdown-style Action whose default click brings
 					// up the child Menu.
@@ -291,8 +291,8 @@ public class ActionTreeContribution {
 							ToolItem toolItem = (ToolItem) item.getWidget();
 							IMenuCreator menuCreator = actionTree
 									.getMenuCreator();
-							Menu menu = menuCreator.getMenu(toolItem
-									.getParent());
+							Menu menu = menuCreator
+									.getMenu(toolItem.getParent());
 
 							// We want to align the menu with the bottom-left
 							// corner

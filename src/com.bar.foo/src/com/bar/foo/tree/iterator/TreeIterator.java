@@ -29,9 +29,7 @@ public abstract class TreeIterator<T extends ITree<T>> implements Iterator<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Iterator#next()
+	 * Implements a method from Iterator.
 	 */
 	@Override
 	public T next() {
@@ -50,16 +48,14 @@ public abstract class TreeIterator<T extends ITree<T>> implements Iterator<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Iterator#remove()
+	 * Implements a method from Iterator.
 	 */
 	@Override
 	public void remove() {
 		// TODO Implement this method to actually remove the iterator.
-
 		throw new UnsupportedOperationException("TreeIterator error: "
 				+ "Removing elements is currently not supported.");
+
 	}
 
 }

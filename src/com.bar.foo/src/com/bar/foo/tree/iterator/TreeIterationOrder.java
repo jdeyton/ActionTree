@@ -6,7 +6,7 @@ package com.bar.foo.tree.iterator;
  * restricted to binary trees, so the definition of mid-order is not inherently
  * clear.
  * 
- * @author djg
+ * @author Jordan
  *
  */
 public enum TreeIterationOrder {
@@ -16,12 +16,14 @@ public enum TreeIterationOrder {
 	 * children will be visited, then all of root's grandchildren, and so on.
 	 */
 	BreadthFirst,
+
 	/**
 	 * Pre-order traversal visits a node before visiting its children. After a
 	 * node and all of its children are visited, its next sibling is visited,
 	 * then its children, and so on.
 	 */
 	PreOrder,
+
 	/**
 	 * Post-order traversal visits a node after visiting its children. After the
 	 * node's children and the node are visited, its next sibling's children are

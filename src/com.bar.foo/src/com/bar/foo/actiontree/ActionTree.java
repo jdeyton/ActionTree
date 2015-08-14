@@ -55,7 +55,8 @@ import com.bar.foo.tree.iterator.TreeIterationOrder;
  * one of the following:
  * <ul>
  * <li>If its {@code Action} is not set, it will be disabled.</li>
- * <li>Otherwise, if its {@code Action} is set, clicking it will be disabled.</li>
+ * <li>Otherwise, if its {@code Action} is set, clicking it will be disabled.
+ * </li>
  * </ul>
  * </li>
  * 
@@ -159,8 +160,8 @@ public class ActionTree extends BasicTree<ActionTree> {
 		}
 		// If necessary, throw an exception when the source tree is null.
 		else {
-			throw new IllegalArgumentException("ActionTree error: "
-					+ "Cannot copy from null tree.");
+			throw new IllegalArgumentException(
+					"ActionTree error: " + "Cannot copy from null tree.");
 		}
 
 		return;
@@ -302,9 +303,7 @@ public class ActionTree extends BasicTree<ActionTree> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.BasicTree#equals(java.lang.Object)
+	 * Overrides a method from BasicTree.
 	 */
 	@Override
 	public boolean equals(Object object) {
@@ -318,17 +317,14 @@ public class ActionTree extends BasicTree<ActionTree> {
 			equals = (text == null ? tree.text == null : text.equals(tree.text))
 					&& (toolTipText == null ? tree.toolTipText == null
 							: toolTipText.equals(tree.toolTipText))
-					&& style == tree.style
-					&& image == tree.image
+					&& style == tree.style && image == tree.image
 					&& action == tree.action;
 		}
 		return equals;
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.BasicTree#hashCode()
+	 * Overrides a method from BasicTree.
 	 */
 	@Override
 	public int hashCode() {
@@ -343,15 +339,11 @@ public class ActionTree extends BasicTree<ActionTree> {
 		return hash;
 	}
 
-	// ---- Extends ITree<T> ---- //
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#getValue()
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public ActionTree getValue() {
 		return this;
 	}
-	// -------------------------- //
 }

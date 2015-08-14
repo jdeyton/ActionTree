@@ -87,9 +87,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#addChild(com.bar.foo.tree.ITree)
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public boolean addChild(T child) {
@@ -108,9 +106,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#getChild(int)
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public T getChild(int index) {
@@ -118,9 +114,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#getChildren()
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public List<T> getChildren() {
@@ -128,9 +122,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#getNumberOfChildren()
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public int getNumberOfChildren() {
@@ -138,9 +130,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#getParent()
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public T getParent() {
@@ -148,9 +138,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#hasChild(com.bar.foo.tree.ITree)
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public boolean hasChild(T child) {
@@ -158,9 +146,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#hasChildren()
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public boolean hasChildren() {
@@ -168,9 +154,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Iterable#iterator()
+	 * Implements a method from Iterable.
 	 */
 	@Override
 	public Iterator<T> iterator() {
@@ -178,11 +162,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.bar.foo.tree.ITree#iterator(com.bar.foo.tree.iterator.TreeIterationOrder
-	 * )
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public Iterator<T> iterator(TreeIterationOrder order) {
@@ -206,9 +186,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#removeChild(int)
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public T removeChild(int index) {
@@ -220,9 +198,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#removeChild(com.bar.foo.tree.ITree)
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public boolean removeChild(T child) {
@@ -233,11 +209,8 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 		return removed;
 	}
 
-	/**
-	 * This method is for use solely inside {@link BasicTree}.
-	 * 
-	 * @param parent
-	 *            The new parent.
+	/*
+	 * Implements a method from ITree.
 	 */
 	protected final void setParent(T parent) {
 		this.parent = parent;
@@ -289,9 +262,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#equals(com.bar.foo.tree.ITree, boolean)
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public final boolean equals(ITree<T> object, boolean fullTree) {
@@ -301,8 +272,10 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 			BasicTree<T> tree = (BasicTree<T>) object;
 
 			// Grab breadth-first iterators for these trees.
-			Iterator<T> iterator = tree.iterator(TreeIterationOrder.BreadthFirst);
-			Iterator<T> treeIterator = iterator(TreeIterationOrder.BreadthFirst);
+			Iterator<T> iterator = tree
+					.iterator(TreeIterationOrder.BreadthFirst);
+			Iterator<T> treeIterator = iterator(
+					TreeIterationOrder.BreadthFirst);
 
 			// Skip the first node, which is this one, since it's already been
 			// compared above.
@@ -356,9 +329,7 @@ public abstract class BasicTree<T extends BasicTree<T>> implements ITree<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.tree.ITree#hashCode(boolean)
+	 * Implements a method from ITree.
 	 */
 	@Override
 	public final int hashCode(boolean fullTree) {

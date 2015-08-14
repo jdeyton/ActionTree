@@ -4,6 +4,34 @@ import java.util.Stack;
 
 import com.bar.foo.tree.ITree;
 
+/**
+ * This class provides a post-order tree iterator implementation. In other
+ * words, it traverses each sub-tree before operating on the sub-tree's root
+ * node.
+ * <p>
+ * For instance, for a tree with the following nodes (assume insertion order
+ * goes from top to bottom):
+ * </p>
+ * 
+ * <pre>
+ *   A
+ *   |--B
+ *   |  |--D
+ *   |  \--E
+ *   |
+ *   \--C
+ *      |--F
+ *      \--G
+ * </pre>
+ * <p>
+ * The iteration order will be {@literal D-E-B-F-G-C-A}.
+ * </p>
+ * 
+ * @author Jordan
+ *
+ * @param <T>
+ *            The type of tree node.
+ */
 public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 
 	/**
@@ -39,9 +67,7 @@ public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.TreeIterator#hasNext()
+	 * Overrides a method from TreeIterator.
 	 */
 	@Override
 	public boolean hasNext() {
@@ -49,9 +75,7 @@ public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bar.foo.TreeIterator#next()
+	 * Overrides a method from TreeIterator.
 	 */
 	@Override
 	public T next() {
@@ -65,9 +89,8 @@ public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 		// If this is the first node visited or the last node visited was not
 		// the right-most child, then we need to find the next sibling and add
 		// all of its left-descendants to the stack.
-		if (node.hasChildren()
-				&& lastNodeVisited != node
-						.getChild(node.getNumberOfChildren() - 1)) {
+		if (node.hasChildren() && lastNodeVisited != node
+				.getChild(node.getNumberOfChildren() - 1)) {
 			// Note that we must handle the case where no node has yet been
 			// visited.
 			if (lastNodeVisited == null) {
