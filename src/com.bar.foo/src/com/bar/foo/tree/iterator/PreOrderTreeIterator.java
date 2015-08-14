@@ -70,17 +70,24 @@ public class PreOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 	 * Overrides a method from TreeIterator.
 	 */
 	@Override
-	public T next() {
-
-		// Set the default return value (null).
-		T next = super.next();
-
+	protected T getNext() {
 		// If we have another tree node to iterate over, proceed.
-		next = stack.pop();
+		T next = stack.pop();
 		for (int i = next.getNumberOfChildren() - 1; i >= 0; i--) {
 			stack.push(next.getChild(i));
 		}
-
 		return next;
+	}
+
+	/*
+	 * Overrides a method from TreeIterator.
+	 */
+	@Override
+	protected void removeFromIteration(T subtree) {
+		// The last node visited simply pushed all of its children to the stack.
+		// Remove all of them from the top of the stack.
+		for (int i = 0; i < subtree.getNumberOfChildren(); i++) {
+			stack.pop();
+		}
 	}
 }

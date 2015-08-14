@@ -1,7 +1,6 @@
 package com.bar.foo.tree.iterator;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 import com.bar.foo.tree.ITree;
 
@@ -40,7 +39,7 @@ public class BreadthFirstTreeIterator<T extends ITree<T>>
 	 * A queue used to maintain state information about the position of the
 	 * iterator. If empty, there is no remaining tree nodes to visit.
 	 */
-	private final Queue<T> queue = new LinkedList<T>();
+	private final LinkedList<T> queue = new LinkedList<T>();
 
 	/**
 	 * The default constructor. Requires a root node. The root node and all
@@ -73,17 +72,24 @@ public class BreadthFirstTreeIterator<T extends ITree<T>>
 	 * Overrides a method from TreeIterator.
 	 */
 	@Override
-	public T next() {
-
-		// Set the default return value (null).
-		T next = super.next();
-
+	protected T getNext() {
 		// If we have another tree node to iterate over, proceed.
-		next = queue.poll();
+		T next = queue.poll();
 		for (T child : next.getChildren()) {
 			queue.add(child);
 		}
-
 		return next;
+	}
+
+	/*
+	 * Overrides a method from TreeIterator.
+	 */
+	@Override
+	protected void removeFromIteration(T subtree) {
+		// The last node visited simply pushed all of its children to the back
+		// of the queue. Remove all of them from the end of the queue.
+		for (int i = 0; i < subtree.getNumberOfChildren(); i++) {
+			queue.removeLast();
+		}
 	}
 }

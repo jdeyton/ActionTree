@@ -78,11 +78,7 @@ public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 	 * Overrides a method from TreeIterator.
 	 */
 	@Override
-	public T next() {
-
-		// Set the default return value.
-		T next = super.next();
-
+	protected T getNext() {
 		// Take a peek at the top node in the stack.
 		T node = stack.peek();
 
@@ -117,9 +113,44 @@ public class PostOrderTreeIterator<T extends ITree<T>> extends TreeIterator<T> {
 		}
 
 		// Pop the top node on the stack, as it is the next node to traverse.
-		next = stack.pop();
+		T next = stack.pop();
 		lastNodeVisited = next;
 
 		return next;
 	}
+
+	/*
+	 * Overrides a method from TreeIterator.
+	 */
+	@Override
+	protected void removeFromIteration(T subtree) {
+		// Because we keep track of the last visited node, it needs to be
+		// updated to the proper value as if the sub-tree never existed.
+
+		// Unset the last node visited.
+		lastNodeVisited = null;
+
+		// Find the previous left-sibling in the ancestor tree if possible.
+		T node = subtree;
+		T ancestor = node.getParent();
+		int i = 0;
+		while (ancestor != null && i == 0) {
+			for (i = 0; i < ancestor.getNumberOfChildren(); i++) {
+				if (ancestor.getChild(i) == node) {
+					break;
+				}
+			}
+			node = ancestor;
+			ancestor = node.getParent();
+		}
+
+		// If a previous left-sibling was found among the ancestors, mark it as
+		// the last visited node.
+		if (i > 0) {
+			lastNodeVisited = node.getChild(i - 1);
+		}
+
+		return;
+	}
+
 }

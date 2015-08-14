@@ -12,6 +12,8 @@ public abstract class TreeIterator<T extends ITree<T>> implements Iterator<T> {
 	 */
 	protected final T root;
 
+	private T current = null;
+
 	/**
 	 * The default constructor. Requires a root node. The root node and all
 	 * descendants will be traversed.
@@ -32,11 +34,7 @@ public abstract class TreeIterator<T extends ITree<T>> implements Iterator<T> {
 	 * Implements a method from Iterator.
 	 */
 	@Override
-	public T next() {
-
-		// Set the default return value.
-		T next = null;
-
+	public final T next() {
 		// Throw a NoSuchElementException if there is no element left to
 		// traverse.
 		if (!hasNext()) {
@@ -44,18 +42,52 @@ public abstract class TreeIterator<T extends ITree<T>> implements Iterator<T> {
 					+ "No elements remaining in iterative traversal.");
 		}
 
-		return next;
+		// Get the next item to be traversed from the sub-class.
+		current = getNext();
+		return current;
 	}
+
+	/**
+	 * Gets the next element in the iteration.
+	 * 
+	 * @return The next element according to the iteration order.
+	 */
+	protected abstract T getNext();
 
 	/*
 	 * Implements a method from Iterator.
 	 */
 	@Override
-	public void remove() {
-		// TODO Implement this method to actually remove the iterator.
-		throw new UnsupportedOperationException("TreeIterator error: "
-				+ "Removing elements is currently not supported.");
-
+	public final void remove() {
+		// If next was called, the current node was set, and it has not already
+		// been removed, we can try to remove it from the iteration and from the
+		// tree.
+		if (current != null) {
+			removeFromIteration(current);
+			T parent = current.getParent();
+			// Note that we cannot actually "remove" the root node.
+			if (parent != null) {
+				parent.removeChild(current);
+			}
+			current = null;
+		}
+		// Otherwise, the current state of the iterator does not support the
+		// remove operation.
+		else {
+			throw new IllegalStateException(getClass().getName() + " error: "
+					+ "The next() method has not been called or remove() has "
+					+ "already been called after the last call to the next() "
+					+ "method.");
+		}
+		return;
 	}
+
+	/**
+	 * Removes the sub-tree of the specified node from the iteration order.
+	 * 
+	 * @param subtree
+	 *            The sub-tree to remove.
+	 */
+	protected abstract void removeFromIteration(T subtree);
 
 }

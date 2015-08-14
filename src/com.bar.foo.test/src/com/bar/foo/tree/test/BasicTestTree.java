@@ -46,8 +46,8 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 		if (equals && this != object && object instanceof BasicTestTree) {
 			BasicTestTree tree = (BasicTestTree) object;
 			// Compare the string property.
-			equals &= (property == null ? tree.property == null : property
-					.equals(tree.property));
+			equals &= (property == null ? tree.property == null
+					: property.equals(tree.property));
 		}
 		return equals;
 	}
@@ -64,7 +64,25 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 
 	/**
 	 * Creates a tree for testing purposes. This is intended for use with the
-	 * iterator tests.
+	 * iterator tests. The structure of the tree is shown below (assume
+	 * insertion order is top-to-bottom):
+	 * 
+	 * <pre>
+	 * A1
+	 * |--B1
+	 * |  \-C1
+	 * |
+	 * \--B2
+	 *    |--C2
+	 *    |--C3
+	 *    |  |--D1
+	 *    |  \--D2
+	 *    |
+	 *    \--C4
+	 *       |--D3
+	 *       |--D4
+	 *       \--D5
+	 * </pre>
 	 * 
 	 * @return A tree with 4 layers and several children per layer.
 	 */
@@ -74,23 +92,6 @@ public class BasicTestTree extends BasicTree<BasicTestTree> {
 		BasicTestTree b1, b2;
 		BasicTestTree c1, c2, c3, c4;
 		BasicTestTree d1, d2, d3, d4, d5;
-
-		/*-
-		 * Here's how the tree breaks down:
-		 * 
-		 * A1
-		 * |-B1
-		 * | \-C1
-		 * \-B2
-		 *   |-C2
-		 *   |-C3
-		 *   | |-D1
-		 *   | \-D2
-		 *   \-C4
-		 *     |-D3
-		 *     |-D4
-		 *     \-D5
-		 */
 
 		// The root node is labeled A for top level and 1 for first "A".
 		a1 = new BasicTestTree();

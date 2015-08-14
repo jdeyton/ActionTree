@@ -37,7 +37,8 @@ public class TreeIteratorTester {
 		iterator = new FakeTreeIterator<BasicTestTree>(root);
 
 		// Make sure the root node was set.
-		assertSame(root, ((FakeTreeIterator<BasicTestTree>) iterator).getRoot());
+		assertSame(root,
+				((FakeTreeIterator<BasicTestTree>) iterator).getRoot());
 
 		return;
 	}
@@ -94,13 +95,14 @@ public class TreeIteratorTester {
 		BasicTestTree root = new BasicTestTree();
 		iterator = new FakeTreeIterator<BasicTestTree>(root);
 
-		// Make sure the remove operation throws an
-		// UnsupportedOperationException.
+		// Make sure the remove operation throws an IllegalStateException
+		// because next() has not been called.
 		try {
 			iterator.remove();
-			fail("TreeIteratorTester error: "
-					+ "UnsupportedOperationException was not thrown when the iterator was removed.");
-		} catch (UnsupportedOperationException e) {
+			fail(getClass().getName() + " error: "
+					+ "IllegalStateException was not thrown when remove() "
+					+ "called before next().");
+		} catch (IllegalStateException e) {
 			// The exception was thrown as expected. Do nothing.
 		}
 
@@ -119,6 +121,16 @@ public class TreeIteratorTester {
 		@Override
 		public boolean hasNext() {
 			return false;
+		}
+
+		@Override
+		protected T getNext() {
+			return null;
+		}
+
+		@Override
+		protected void removeFromIteration(T subtree) {
+			return;
 		}
 	}
 }

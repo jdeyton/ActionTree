@@ -118,8 +118,8 @@ public class BasicTreeTester {
 		root = BasicTestTree.createTestTree();
 
 		// Get the expected iterator (default - breadth-first).
-		expectedIterator = root.getExpectedOrder(
-				TreeIterationOrder.BreadthFirst).iterator();
+		expectedIterator = root
+				.getExpectedOrder(TreeIterationOrder.BreadthFirst).iterator();
 		// Compare it with the default iterator from the tree implementation.
 		iterator = root.iterator();
 		while (expectedIterator.hasNext()) {
@@ -147,9 +147,13 @@ public class BasicTreeTester {
 		try {
 			iterator.remove();
 			fail("BasicTreeTester error: "
-					+ "The iterator removal operation should not be supported yet.");
+					+ "IllegalStateException should have been thrown "
+					+ "because next() has not been called.");
 		} catch (UnsupportedOperationException e) {
-			// Exception was thrown as expected.
+			fail("BasicTreeTester error: "
+					+ "The iterator removal operation should be supported.");
+		} catch (IllegalStateException e) {
+			// Exception thrown as expected.
 		}
 
 		// Check for each iteration order type.
@@ -158,10 +162,13 @@ public class BasicTreeTester {
 			try {
 				iterator.remove();
 				fail("BasicTreeTester error: "
-						+ "The iterator removal operation should not be supported yet for the order \""
-						+ order + "\".");
+						+ "IllegalStateException should have been thrown "
+						+ "because next() has not been called.");
 			} catch (UnsupportedOperationException e) {
-				// Exception was thrown as expected.
+				fail("BasicTreeTester error: "
+						+ "The iterator removal operation should be supported.");
+			} catch (IllegalStateException e) {
+				// Exception thrown as expected.
 			}
 		}
 
@@ -276,8 +283,8 @@ public class BasicTreeTester {
 		assertFalse(object.hashCode(false) == unequalObject.hashCode(false));
 		assertFalse(object.hashCode(true) == unequalObject.hashCode(true));
 		assertFalse(equalObject.hashCode() == unequalObject.hashCode());
-		assertFalse(equalObject.hashCode(false) == unequalObject
-				.hashCode(false));
+		assertFalse(
+				equalObject.hashCode(false) == unequalObject.hashCode(false));
 		assertFalse(equalObject.hashCode(true) == unequalObject.hashCode(true));
 		// -------------------------------------- //
 
@@ -384,7 +391,8 @@ public class BasicTreeTester {
 		assertTrue(object.hashCode(false) == unequalObject.hashCode(false));
 		assertFalse(object.hashCode(true) == unequalObject.hashCode(true));
 		assertTrue(equalObject.hashCode() == unequalObject.hashCode());
-		assertTrue(equalObject.hashCode(false) == unequalObject.hashCode(false));
+		assertTrue(
+				equalObject.hashCode(false) == unequalObject.hashCode(false));
 		assertFalse(equalObject.hashCode(true) == unequalObject.hashCode(true));
 		// -------------------------------------- //
 
